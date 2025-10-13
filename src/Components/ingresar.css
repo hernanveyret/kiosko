@@ -1,0 +1,74 @@
+.titulo-ingresar {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 5px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+input[type="text"] {
+  padding: 0.8rem 1rem;
+  border: 1px solid #d0d7de;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.2s ease;
+  background-color: #f9fafb;
+}
+
+input[type="text"]:focus {
+  border-color: #4caf50;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.15);
+}
+
+input[type="text"]::placeholder {
+  color: #9ba0a5;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #222;
+  width: 100%;
+  margin-top: .5rem;
+}
+.btn-cargar {
+  padding: 10px;
+  border: none;
+  background-color: rgb(0, 183, 255);
+  color: white;
+  margin-top: 1rem;
+}
+.btn-cargar:hover {
+  background-color: rgb(6, 136, 187);
+}
+
+.text-error {
+  color: #fa2335;
+  font-size: clamp(12px, 1.3vw, 14px);
+  
+  margin-bottom: 1rem;
+}
+@media (max-width: 500px) {
+  form {
+    padding: 1.5rem;
+    max-width: 90%;
+  }
+  input[type="text"] {
+    font-size: 0.95rem;
+  }
+}
+
