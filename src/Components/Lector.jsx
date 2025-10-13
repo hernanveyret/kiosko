@@ -134,11 +134,7 @@ const Lector = ({ setNumero, setIsOnCamara }) => {
     <div className="container-lector">
       <video ref={videoRef} autoPlay playsInline></video>
       <div ref={resultRef}>Esperando código...</div>
-      <button onClick={() => { 
-        //scanningRef.current = false;
-        //stopCamera(); 
-        setIsOnCamara(false); 
-        }}>
+      <button onClick={() => { scanningRef.current = false; stopCamera(); setIsOnCamara(false); }}>
         CERRAR
       </button>
     </div>
@@ -146,5 +142,3 @@ const Lector = ({ setNumero, setIsOnCamara }) => {
 };
 
 export default Lector;
-
-
