@@ -131,6 +131,9 @@ const Lector = ({
     <div className="container-lector">
       <video ref={videoRef} autoPlay playsInline></video>
       <div ref={resultRef}>Esperando código...</div>
+      <button
+      onClick={() => setIsOnCamara(false)}
+      >CERRAR</button>
     </div>
   );
 };
