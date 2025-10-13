@@ -1,10 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './lector.css';
 
-const Lector = ({ 
-                  setNumero, 
-                  setIsOnCamara 
-                }) => {
+const Lector = ({ setNumero, setIsOnCamara }) => {
   const videoRef = useRef(null);
   const resultRef = useRef(null);
   const streamRef = useRef(null);
@@ -13,30 +10,34 @@ const Lector = ({
 
   useEffect(() => {
     const startCamera = async () => {
-      if (streamRef.current) {
-        streamRef.current.getTracks().forEach((t) => t.stop());
-      }
+      stopCamera(); // Detener cualquier cámara previa
+
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const cameras = devices.filter((d) => d.kind === 'videoinput');
-        const backCamera = cameras.find((c) =>
+        const cameras = devices.filter(d => d.kind === 'videoinput');
+
+        // Elegir cámara trasera si existe, sino cualquier cámara disponible
+        const backCamera = cameras.find(c =>
           /back|rear|environment/i.test(c.label)
         );
 
-        const constraints = {
-          video: backCamera
-            ? { deviceId: { exact: backCamera.deviceId } }
-            : { facingMode: { ideal: 'environment' } },
-        };
+        const constraints = backCamera
+          ? { video: { deviceId: backCamera.deviceId } }
+          : { video: true };
 
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         streamRef.current = stream;
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await videoRef.current.play();
+        }
 
         startScanner();
       } catch (err) {
-        resultRef.current.textContent = 'Error: ' + err.message;
+        if (resultRef.current) {
+          resultRef.current.textContent = 'Error: ' + err.message;
+        }
+        console.error('No se pudo iniciar la cámara:', err);
       }
     };
 
@@ -66,18 +67,16 @@ const Lector = ({
       const video = videoRef.current;
 
       const scanLoop = async () => {
-        if (!video.videoWidth || !scanningRef.current) {
+        if (!video || !video.videoWidth || !scanningRef.current) {
           requestAnimationFrame(scanLoop);
           return;
         }
 
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        const w = video.videoWidth;
-        const h = video.videoHeight;
-        canvas.width = w;
-        canvas.height = h;
-        ctx.drawImage(video, 0, 0, w, h);
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         try {
           let code = null;
@@ -87,7 +86,7 @@ const Lector = ({
             const barcodes = await detector.detect(bitmap);
             if (barcodes.length) code = barcodes[0].rawValue;
           } else {
-            const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
+            const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
             const img = new Image();
             img.src = URL.createObjectURL(blob);
             await img.decode();
@@ -96,11 +95,11 @@ const Lector = ({
           }
 
           if (code) {
-            resultRef.current.textContent = '📦 ' + code;
-            setNumero(code); // ✅ guarda el número escaneado
-            stopCamera();    // ✅ cierra la cámara al detectar el código
+            if (resultRef.current) resultRef.current.textContent = '📦 ' + code;
+            setNumero(code);
             scanningRef.current = false;
-            setIsOnCamara(false)
+            stopCamera();
+            setIsOnCamara(false);
             return;
           }
         } catch (err) {
@@ -115,28 +114,37 @@ const Lector = ({
 
     const stopCamera = () => {
       if (streamRef.current) {
-        streamRef.current.getTracks().forEach((t) => t.stop());
+        streamRef.current.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+      }
+      if (videoRef.current) {
+        videoRef.current.srcObject = null;
       }
     };
 
     initDetector().then(startCamera);
 
-    // Limpieza al desmontar el componente
     return () => {
+      scanningRef.current = false;
       stopCamera();
     };
-  }, [setNumero]);
+  }, [setNumero, setIsOnCamara]);
 
   return (
     <div className="container-lector">
       <video ref={videoRef} autoPlay playsInline></video>
       <div ref={resultRef}>Esperando código...</div>
-      <button
-      onClick={() => setIsOnCamara(false)}
-      >CERRAR</button>
+      <button onClick={() => { 
+        //scanningRef.current = false;
+        //stopCamera(); 
+        setIsOnCamara(false); 
+        }}>
+        CERRAR
+      </button>
     </div>
   );
 };
 
 export default Lector;
+
 
