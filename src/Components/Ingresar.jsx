@@ -20,9 +20,6 @@ const {
   formState: { errors }  
 } = useForm()
 
-useEffect(() => {
-  console.log('numero:' , numero)
-},[numero])
 
   // En el componente Ingresar.jsx
 useEffect(() => {

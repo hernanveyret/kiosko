@@ -62,6 +62,7 @@ const Home = () => {
             isLista &&
               <Lista 
               productos={productos}
+              setProductos={setProductos}
               />
           }
         </section>

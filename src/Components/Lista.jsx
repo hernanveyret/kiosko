@@ -2,15 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import Item from './Item';
 import './lista.css';
-const Lista = ({ productos }) => {
-useEffect(() => {
-  console.log(productos)
-},[productos])
+const Lista = ({ productos, setProductos }) => {
+  const [ codigo, setCodigo ] = useState(null)
+
+const eliminarProducto = (e) => {
+  const filtro = productos.filter(item => item.codigo !== e)
+  console.log(filtro)
+  if(filtro){
+    setProductos(filtro)
+  }
+}
+
 
 return (
   <div className='contenedor-lista'>
     <h3>Lista de productos</h3>
-    <div style={{background:'grey', color:'white', marginBottom:'0'}} className='contenedor-item' >
+    <div style={{background:'grey', color:'white', marginBottom:'0'}} className='contenedor-item header-oculto' >
       <div style={{borderRight: '1px solid white'}} className='item-img'></div>
       <div className='item-info'>
         <p style={{borderRight: '1px solid white'}}>CODIGO</p>
@@ -30,6 +37,7 @@ return (
             <Item
               key={i}
               item={item}
+              eliminarProducto={eliminarProducto}
               />
           ))
           :
