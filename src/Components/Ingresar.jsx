@@ -24,6 +24,14 @@ useEffect(() => {
   console.log('numero:' , numero)
 },[numero])
 
+  // En el componente Ingresar.jsx
+useEffect(() => {
+    if (numero && numero !== 0) {
+        // ✅ Esta función es la que actualiza el input después del escaneo.
+        setValue('codigo', numero); 
+    }
+}, [numero, setValue]);
+
 const cargarProducto = (data) => {
   if (!archivoOriginal) return;
 

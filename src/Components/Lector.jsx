@@ -24,13 +24,6 @@ const Lector = ({
     }
   };
 
-  // En el componente Ingresar.jsx
-useEffect(() => {
-    if (numero && numero !== 0) {
-        // ✅ Esta función es la que actualiza el input después del escaneo.
-        setValue('codigo', numero); 
-    }
-}, [numero, setValue]);
 
   // Función para inicializar el detector de códigos (nativo o fallback)
   const initDetector = async () => {
