@@ -134,6 +134,7 @@ const Lector = ({
 
         if (code) {
           resultRef.current.textContent = '📦 Código Detectado: ' + code;
+          console.log(code)
           setNumero(code);       // Guarda el número escaneado
           stopCamera();          // Cierra la cámara al detectar el código
           setIsOnCamara(false);

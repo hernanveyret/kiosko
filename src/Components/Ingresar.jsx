@@ -19,6 +19,10 @@ const {
   formState: { errors }  
 } = useForm()
 
+useEffect(() => {
+  console.log('numero:' , numero)
+},[numero])
+
 const cargarProducto = (data) => {
   if (!archivoOriginal) return;
 
@@ -49,6 +53,7 @@ return (
       { 
         isOnCamara &&
           <Lector 
+          setNumero={setNumero}
           setIsOnCamara={setIsOnCamara}
           />
           
