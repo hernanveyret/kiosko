@@ -1,6 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import './lector.css';
 
+// Importación condicional del fallback para el detector de código de barras
+// NOTA: Se asume que @zxing/library ya está instalado localmente.
+
 const Lector = ({ 
   setNumero, 
   setIsOnCamara 
@@ -11,158 +14,165 @@ const Lector = ({
   const detectorRef = useRef(null);
   const scanningRef = useRef(true);
 
-  useEffect(() => {
-    const stopCamera = () => {
-      if (streamRef.current) {
-        // Detiene todas las pistas de la cámara
-        streamRef.current.getTracks().forEach((t) => t.stop());
-        streamRef.current = null;
-        scanningRef.current = false; // Detiene el bucle de escaneo
-      }
-    };
+  // Función para detener la cámara y el escaneo
+  const stopCamera = () => {
+    scanningRef.current = false; // Detiene el bucle de escaneo
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+  };
 
-    const startCamera = async () => {
-      stopCamera(); // Asegura detener la cámara anterior si existe
+  // Función para inicializar el detector de códigos (nativo o fallback)
+  const initDetector = async () => {
+    if ('BarcodeDetector' in window) {
+      detectorRef.current = new BarcodeDetector({
+        formats: [
+          'ean_13', 'ean_8', 'code_128', 'code_39', 'code_93', 'upc_e', 'upc_a',
+        ],
+      });
+    } else {
+      // Importación local del paquete instalado (soluciona el TypeError)
+      try {
+        const mod = await import('@zxing/library'); 
+        detectorRef.current = new mod.BrowserMultiFormatReader();
+      } catch (e) {
+        console.error("Error al cargar @zxing/library. ¿Está instalado?", e);
+        resultRef.current.textContent = "Error: Detector no disponible o mal instalado.";
+        stopCamera();
+      }
+    }
+  };
+
+  // Función principal para iniciar la cámara
+  const startCamera = async () => {
+    stopCamera(); // Asegura detener la cámara anterior
+
+    try {
+      let constraints = { video: true }; // Restricción general (Webcam en PC)
+      let stream = null;
+      
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      const cameras = devices.filter((d) => d.kind === 'videoinput');
+
+      // 1. Intenta la cámara trasera (móvil) por etiqueta o facingMode
+      const backCamera = cameras.find((c) =>
+        /back|rear|environment/i.test(c.label)
+      );
+
+      if (backCamera) {
+          // Si encontramos una cámara trasera por etiqueta, la usamos
+          constraints = { deviceId: { exact: backCamera.deviceId } };
+      } else {
+          // Si no, probamos con el facingMode ideal (para la mayoría de los móviles)
+          constraints = { facingMode: { ideal: 'environment' } };
+      }
 
       try {
-        let constraints = {};
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const cameras = devices.filter((d) => d.kind === 'videoinput');
+        // Intenta la restricción más específica (trasera/ambiente)
+        stream = await navigator.mediaDevices.getUserMedia({ video: constraints });
+      } catch (error) {
+        // Si falla (típico en PC o si la cámara trasera no responde), usa cualquier cámara
+        console.warn("Fallo la restricción específica. Intentando cámara general.");
+        stream = await navigator.mediaDevices.getUserMedia({ video: true }); 
+      }
+      
+      // Asignar el stream
+      streamRef.current = stream;
+      videoRef.current.srcObject = streamRef.current;
+      await videoRef.current.play();
 
-        console.log(cameras)
+      scanningRef.current = true; // Habilita el bucle de escaneo
+      startScanner();
 
-        // 1. Intenta obtener la cámara con "facingMode: environment" (móvil, trasera)
-        // 2. Si falla, intenta la primera cámara disponible o simplemente 'true'
-        
-        let backCameraConstraint = { facingMode: { ideal: 'environment' } };
-        let generalConstraint = { video: true }; // Permite cualquier cámara
+    } catch (err) {
+      console.error('Error al iniciar la cámara:', err);
+      resultRef.current.textContent = 'Error: ' + err.message + '. Asegúrate de tener permisos.';
+    }
+  };
+  
+  // Función para iniciar el bucle de escaneo
+  const startScanner = async () => {
+    const detector = detectorRef.current;
+    const video = videoRef.current;
 
-        if (cameras.length > 0) {
-            // Intenta encontrar una cámara trasera por etiqueta
-            const backCamera = cameras.find((c) =>
-                /back|rear|environment/i.test(c.label)
-            );
+    const scanLoop = async () => {
+      // Detiene el bucle si no hay video o si se ha detenido el escaneo
+      if (!video.videoWidth || !scanningRef.current || !detector) {
+        if(scanningRef.current) {
+             requestAnimationFrame(scanLoop);
+        }
+        return;
+      }
 
-            if (backCamera) {
-                // Si encontramos una por etiqueta, la usamos
-                backCameraConstraint = { deviceId: { exact: backCamera.deviceId } };
-                constraints = backCameraConstraint;
-            } else {
-                // Si no encontramos una con etiqueta, simplemente usamos la primera
-                constraints = { deviceId: { exact: cameras[0].deviceId } };
-            }
+      // Proceso de captura del frame y escaneo
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const w = video.videoWidth;
+      const h = video.videoHeight;
+      canvas.width = w;
+      canvas.height = h;
+      ctx.drawImage(video, 0, 0, w, h);
+
+      try {
+        let code = null;
+
+        if (detector.detect) {
+          // BarcodeDetector API nativa
+          const bitmap = await createImageBitmap(canvas);
+          const barcodes = await detector.detect(bitmap);
+          if (barcodes.length) code = barcodes[0].rawValue;
         } else {
-            // Si no se puede enumerar, usamos el facingMode ideal
-            constraints = backCameraConstraint; 
+          // Fallback con zxing (necesita convertir a imagen)
+          const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
+          const img = new Image();
+          img.src = URL.createObjectURL(blob);
+          await img.decode();
+          const res = await detector.decodeFromImage(img);
+          if (res) code = res.text;
         }
 
-        try {
-            // 💡 Intenta primero con la restricción más específica (trasera/ideal)
-            const stream = await navigator.mediaDevices.getUserMedia({ video: constraints });
-            streamRef.current = stream;
-        } catch (error) {
-            // 💡 Si falla (ej. en PC sin cámara trasera), intenta con la restricción general
-            const stream = await navigator.mediaDevices.getUserMedia(generalConstraint);
-            streamRef.current = stream;
+        if (code) {
+          resultRef.current.textContent = '📦 Código Detectado: ' + code;
+          setNumero(code);       // Guarda el número escaneado
+          stopCamera();          // Cierra la cámara al detectar el código
+          setIsOnCamara(false);
+          return;
         }
-        
-        // Asignar el stream al elemento video y reproducir
-        videoRef.current.srcObject = streamRef.current;
-        await videoRef.current.play();
-
-        scanningRef.current = true; // Habilita el bucle de escaneo
-        startScanner();
       } catch (err) {
-        console.error('Error al iniciar la cámara:', err);
-        resultRef.current.textContent = 'Error al iniciar la cámara: ' + err.message + '. Asegúrate de tener permisos.';
+        // Ignorar errores de detección, continuar escaneando
       }
+
+      requestAnimationFrame(scanLoop);
     };
 
-    // ... (El resto de initDetector, startScanner y scanLoop son correctos y se mantienen)
+    scanLoop();
+  };
 
-    const initDetector = async () => {
-      // ... (código initDetector sin cambios)
-      if ('BarcodeDetector' in window) {
-        detectorRef.current = new BarcodeDetector({
-          formats: [
-            'ean_13', 'ean_8', 'code_128', 'code_39', 'code_93', 'upc_e', 'upc_a',
-          ],
-        });
-      } else {
-        const mod = await import(
-          'https://unpkg.com/@zxing/library@0.18.6/esm/index.js'
-        );
-        detectorRef.current = new mod.BrowserMultiFormatReader();
-      }
-    };
-
-    const startScanner = async () => {
-        const detector = detectorRef.current;
-        const video = videoRef.current;
-  
-        const scanLoop = async () => {
-          if (!video.videoWidth || !scanningRef.current) {
-            requestAnimationFrame(scanLoop);
-            return;
-          }
-  
-          // ... (código de escaneo sin cambios)
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const w = video.videoWidth;
-          const h = video.videoHeight;
-          canvas.width = w;
-          canvas.height = h;
-          ctx.drawImage(video, 0, 0, w, h);
-  
-          try {
-            let code = null;
-  
-            if (detector.detect) {
-              const bitmap = await createImageBitmap(canvas);
-              const barcodes = await detector.detect(bitmap);
-              if (barcodes.length) code = barcodes[0].rawValue;
-            } else {
-              const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
-              const img = new Image();
-              img.src = URL.createObjectURL(blob);
-              await img.decode();
-              const res = await detector.decodeFromImage(img);
-              if (res) code = res.text;
-            }
-  
-            if (code) {
-              resultRef.current.textContent = '📦 ' + code;
-              setNumero(code); 
-              stopCamera();    
-              setIsOnCamara(false);
-              return;
-            }
-          } catch (err) {
-            // ignorar errores de detección
-          }
-  
-          requestAnimationFrame(scanLoop);
-        };
-  
-        scanLoop();
-      };
-
+  // useEffect se ejecuta solo al montar el componente
+  useEffect(() => {
     initDetector().then(startCamera);
 
-    // Limpieza al desmontar el componente
+    // Limpieza al desmontar
     return () => {
       stopCamera();
     };
-  }, [setNumero, setIsOnCamara]);
+  }, [setNumero, setIsOnCamara]); // Dependencias para el linting
 
   return (
     <div className="container-lector">
-      <video ref={videoRef} autoPlay playsInline muted></video> {/* Añadido 'muted' para evitar advertencias de autoPlay */}
-      <div ref={resultRef}>Esperando código...</div>
+      {/* Añadido 'muted' para evitar restricciones de autoPlay del navegador */}
+      <video ref={videoRef} autoPlay playsInline muted></video>
+      <div className="resultado-scan" ref={resultRef}>Esperando código...</div>
       <button
-      onClick={() => setIsOnCamara(false)}
-      >CERRAR</button>
+        className="cerrar-lector-btn"
+        onClick={() => {
+          stopCamera();
+          setIsOnCamara(false);
+        }}
+      >
+        CERRAR CÁMARA
+      </button>
     </div>
   );
 };
