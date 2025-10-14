@@ -16,6 +16,7 @@ const {
   register,
   reset,
   handleSubmit,
+  setValue,
   formState: { errors }  
 } = useForm()
 
@@ -54,15 +55,15 @@ return (
         isOnCamara &&
           <Lector 
           setNumero={setNumero}
+          numero={numero}
           setIsOnCamara={setIsOnCamara}
-          />
-          
+          />          
       }
       <form
         onSubmit={handleSubmit(cargarProducto)}
       >
         <label>#Codigo
-        <input type="text" name="id" defaultValue={numero && numero} 
+        <input type="text" name="id"
         {...register('codigo', {
           required: {
             value: true,

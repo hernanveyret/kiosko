@@ -5,7 +5,8 @@ import './lector.css';
 // NOTA: Se asume que @zxing/library ya está instalado localmente.
 
 const Lector = ({ 
-  setNumero, 
+  setNumero,
+  numero,
   setIsOnCamara 
 }) => {
   const videoRef = useRef(null);
@@ -22,6 +23,14 @@ const Lector = ({
       streamRef.current = null;
     }
   };
+
+  // En el componente Ingresar.jsx
+useEffect(() => {
+    if (numero && numero !== 0) {
+        // ✅ Esta función es la que actualiza el input después del escaneo.
+        setValue('codigo', numero); 
+    }
+}, [numero, setValue]);
 
   // Función para inicializar el detector de códigos (nativo o fallback)
   const initDetector = async () => {
