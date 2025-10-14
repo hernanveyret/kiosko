@@ -29,6 +29,8 @@ const Lector = ({
         const devices = await navigator.mediaDevices.enumerateDevices();
         const cameras = devices.filter((d) => d.kind === 'videoinput');
 
+        console.log(cameras)
+
         // 1. Intenta obtener la cámara con "facingMode: environment" (móvil, trasera)
         // 2. Si falla, intenta la primera cámara disponible o simplemente 'true'
         
