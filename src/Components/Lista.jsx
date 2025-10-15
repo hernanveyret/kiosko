@@ -44,8 +44,8 @@ return (
     <section 
       className='lista'>
         { 
-
-          search.length > 0 ? 
+          search.length > 0 
+          ?
           search.map((item, i) => (
             <Item
               key={i}
@@ -53,9 +53,7 @@ return (
               eliminarProducto={eliminarProducto}
               />
           )) 
-
           :
-
           productos.length > 0 ? 
           productos.map((item, i) => (
             <Item
