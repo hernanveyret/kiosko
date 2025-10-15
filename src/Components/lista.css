@@ -16,6 +16,9 @@
   height: auto;  
 }
 
+.buscador {
+  margin: 10px 0;
+}
 @media (max-width: 500px) {
 
 }

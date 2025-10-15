@@ -3,8 +3,8 @@ import Card from './Card';
 import Item from './Item';
 import './lista.css';
 const Lista = ({ productos, setProductos }) => {
-  const [ codigo, setCodigo ] = useState(null)
-
+  const [ codigo, setCodigo ] = useState(null);
+  const [ search, setSearch ] = useState([])
 const eliminarProducto = (e) => {
   const filtro = productos.filter(item => item.codigo !== e)
   console.log(filtro)
@@ -13,10 +13,22 @@ const eliminarProducto = (e) => {
   }
 }
 
+const buscarProducto = (item) => {
+  const resultados = productos.filter(e =>
+    e.descripcion.toLowerCase().includes(item.toLowerCase())
+  );
+  setSearch(resultados);
+};
 
 return (
   <div className='contenedor-lista'>
     <h3>Lista de productos</h3>
+    <div className="buscador">
+      <input type="text" 
+      placeholder='Buscar...'
+        onChange={(e) => { buscarProducto(e.target.value)}}
+      />
+    </div>
     <div style={{background:'grey', color:'white', marginBottom:'0'}} className='contenedor-item header-oculto' >
       <div style={{borderRight: '1px solid white'}} className='item-img'></div>
       <div className='item-info'>
@@ -31,7 +43,19 @@ return (
     </div>
     <section 
       className='lista'>
-        {
+        { 
+
+          search.length > 0 ? 
+          search.map((item, i) => (
+            <Item
+              key={i}
+              item={item}
+              eliminarProducto={eliminarProducto}
+              />
+          )) 
+
+          :
+
           productos.length > 0 ? 
           productos.map((item, i) => (
             <Item
