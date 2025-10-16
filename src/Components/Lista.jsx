@@ -13,6 +13,7 @@ const Lista = ({
               }) => {
   const [ codigo, setCodigo ] = useState(null);
   const [ search, setSearch ] = useState([])
+  const [ valorCodigo , setValorCodigo ] = useState(null)
 const eliminarProducto = (e) => {
   const filtro = productos.filter(item => item.codigo !== e)
   console.log(filtro)
@@ -29,6 +30,14 @@ const buscarProducto = (item) => {
   setSearch(resultados);
 };
 
+ // En el componente Ingresar.jsx
+useEffect(() => {
+    if (numero && numero !== 0) {
+        // ✅ Esta función es la que actualiza el input después del escaneo.
+        setValorCodigo(numero); 
+    }
+}, [numero, setValue]);
+
 return (
   <div className='contenedor-lista'>
     {
@@ -43,7 +52,7 @@ return (
     <div className="buscador">
       <input type="text" 
       placeholder='Buscar...'
-      defaultValue={numero}
+      defaultValue={valorCodigo}
         onChange={(e) => { buscarProducto(e.target.value)}}
       />
       <button
