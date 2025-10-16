@@ -7,9 +7,11 @@ const Ingresar = ({
                   isOnCamara, 
                   setIsOnCamara ,
                   setProductos,
-                  productos
+                  productos,
+                  numero,
+                  setNumero
                 }) => {  
-const [ numero, setNumero ] = useState(0)
+
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
 
 const {

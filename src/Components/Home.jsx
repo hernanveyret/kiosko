@@ -12,12 +12,12 @@ const Home = () => {
   const [ isLista, setIsLista ] = useState(false);
   const [ isOnCamara, setIsOnCamara ] = useState(false);
 
+  const [ numero, setNumero ] = useState(0)
+
   useEffect(() => {
-    console.log(productos)
     const nuevosProductos = productos
     localStorage.setItem('kiosco', JSON.stringify(nuevosProductos))
   },[productos])
-
 
   return (
     <div className="contenedor">
@@ -62,6 +62,8 @@ const Home = () => {
               setIsOnCamara={setIsOnCamara}
               setProductos={setProductos}
               productos={productos}
+              numero={numero}
+              setNumero={setNumero}
               /> 
           }
           {
@@ -69,6 +71,10 @@ const Home = () => {
               <Lista 
               productos={productos}
               setProductos={setProductos}
+              setIsOnCamara={setIsOnCamara}
+              isOnCamara={isOnCamara}
+              numero={numero}
+              setNumero={setNumero}
               />
           }
         </section>

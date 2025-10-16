@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
+import Lector from './Lector';
 import Item from './Item';
 import './lista.css';
-const Lista = ({ productos, setProductos }) => {
+const Lista = ({ 
+                productos, 
+                setProductos,
+                numero,
+                setNumero,
+                setIsOnCamara,
+                isOnCamara
+              }) => {
   const [ codigo, setCodigo ] = useState(null);
   const [ search, setSearch ] = useState([])
 const eliminarProducto = (e) => {
@@ -14,6 +22,7 @@ const eliminarProducto = (e) => {
 }
 
 const buscarProducto = (item) => {
+  console.log(item)
   const resultados = productos.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase())
   );
@@ -22,12 +31,26 @@ const buscarProducto = (item) => {
 
 return (
   <div className='contenedor-lista'>
+    {
+      isOnCamara && 
+        <Lector 
+        setNumero={setNumero}
+        numero={numero}
+        setIsOnCamara={setIsOnCamara}
+        />
+    }
     <h3>Lista de productos</h3>
     <div className="buscador">
       <input type="text" 
       placeholder='Buscar...'
+      defaultValue={numero}
         onChange={(e) => { buscarProducto(e.target.value)}}
       />
+      <button
+        onClick={() => { setIsOnCamara(true)}}
+      >
+        Scanear Codigo
+      </button>
     </div>
     <div style={{background:'grey', color:'white', marginBottom:'0'}} className='contenedor-item header-oculto' >
       <div style={{borderRight: '1px solid white'}} className='item-img'></div>
