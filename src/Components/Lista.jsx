@@ -36,7 +36,7 @@ useEffect(() => {
         // ✅ Esta función es la que actualiza el input después del escaneo.
         setValorCodigo(numero); 
     }
-}, [numero, setValue]);
+}, [numero]);
 
 return (
   <div className='contenedor-lista'>
