@@ -11,29 +11,28 @@ const Lista = ({
                 setIsOnCamara,
                 isOnCamara
               }) => {
-  const [ codigo, setCodigo ] = useState(null);
-  const [ search, setSearch ] = useState([])
-  const [ valorCodigo , setValorCodigo ] = useState(null)
+const [ codigo, setCodigo ] = useState(null);
+const [ search, setSearch ] = useState([])
+const [ valorCodigo , setValorCodigo ] = useState(null)
+
 const eliminarProducto = (e) => {
-  const filtro = productos.filter(item => item.codigo !== e)
-  console.log(filtro)
+  const filtro = productos.filter(item => item.codigo !== e)  
   if(filtro){
     setProductos(filtro)
   }
 }
 
-const buscarProducto = (item) => {
-  console.log(item)
+const buscarProducto = (item) => {  
   const resultados = productos.filter(e =>
-    e.descripcion.toLowerCase().includes(item.toLowerCase())
+    e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
   setSearch(resultados);
 };
 
- // En el componente Ingresar.jsx
+ // detecta si se escaneo algun numero
 useEffect(() => {
     if (numero && numero !== 0) {
-        // ✅ Esta función es la que actualiza el input después del escaneo.
+        // actualiza el input después del escaneo.
         setValorCodigo(numero); 
     }
 }, [numero]);
@@ -56,9 +55,10 @@ return (
         onChange={(e) => { buscarProducto(e.target.value)}}
       />
       <button
+        className='btn-scann'
         onClick={() => { setIsOnCamara(true)}}
       >
-        Scanear Codigo
+        Ecanear Codigo
       </button>
     </div>
     <div style={{background:'grey', color:'white', marginBottom:'0'}} className='contenedor-item header-oculto' >

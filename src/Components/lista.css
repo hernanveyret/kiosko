@@ -19,6 +19,20 @@
 .buscador {
   margin: 10px 0;
 }
+
+.btn-scann{
+  margin-left: .5rem;
+  border: none;
+  cursor:pointer;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 5px;
+  transition: .2s ease-in-out
+}
+.btn-scann:hover {
+  background-color: grey;
+}
 @media (max-width: 500px) {
 
 }
