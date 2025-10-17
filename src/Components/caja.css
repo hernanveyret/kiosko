@@ -1,0 +1,7 @@
+.contenedor-caja {
+  display: flex;
+  border: 2px solid green;
+  width: 100%;
+  height: 200px;
+  
+}

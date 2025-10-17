@@ -167,7 +167,7 @@ const Lector = ({
       <video ref={videoRef} autoPlay playsInline muted></video>
       <div className="resultado-scan" ref={resultRef}>Esperando código...</div>
       <button
-        className="cerrar-lector-btn"
+        className="btn-scann"
         onClick={() => {
           stopCamera();
           setIsOnCamara(false);
