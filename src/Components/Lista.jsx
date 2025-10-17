@@ -15,6 +15,10 @@ const [ codigo, setCodigo ] = useState(null);
 const [ search, setSearch ] = useState([])
 const [ valorCodigo , setValorCodigo ] = useState(null)
 
+useEffect(() => {
+  setNumero(null)
+},[])
+
 const eliminarProducto = (e) => {
   const filtro = productos.filter(item => item.codigo !== e)  
   if(filtro){
@@ -33,7 +37,8 @@ const buscarProducto = (item) => {
 useEffect(() => {
     if (numero && numero !== 0) {
         // actualiza el input después del escaneo.
-        setValorCodigo(numero); 
+        setValorCodigo(numero);
+        buscarProducto(numero)
     }
 }, [numero]);
 
