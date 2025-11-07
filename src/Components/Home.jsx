@@ -85,7 +85,10 @@ const Home = () => {
           }
           {
             isCaja &&
-              <Caja />
+              <Caja 
+                db={db}
+                numero={numero}
+              />
           }
         </section>
       </main>
