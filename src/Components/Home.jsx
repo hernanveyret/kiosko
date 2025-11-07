@@ -3,6 +3,7 @@ import Ingresar from './Ingresar';
 import Lista from './Lista';
 import './home.css';
 import Caja from './Caja';
+import Lector from './Lector';
 
 const Home = () => {
   const productosEnLocal = localStorage.getItem('kiosco')
@@ -88,6 +89,8 @@ const Home = () => {
               <Caja 
                 db={db}
                 numero={numero}
+                setIsOnCamara={setIsOnCamara}
+                isOnCamara={isOnCamara}
               />
           }
         </section>

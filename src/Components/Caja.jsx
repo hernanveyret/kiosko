@@ -4,7 +4,9 @@ import './caja.css';
 
 const Caja = ({
                 db,
-                numero
+                numero,
+                setIsOnCamara,
+                isOnCamara
 }) => {
 
 const [ valorCodigo , setValorCodigo ] = useState(null);
@@ -51,6 +53,10 @@ const addCarrito = () => {
 
   return (
     <div className='contenedor-caja'>
+      {
+        isOnCamara  &&
+          <Lector />
+      }
         <h3>Lista de productos</h3>
     <div className="buscador-producto">
       <input type="text" 
