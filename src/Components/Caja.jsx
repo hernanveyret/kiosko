@@ -5,6 +5,7 @@ const Caja = () => {
 
   return (
     <div className='contenedor-caja'>
+      <h1>Cobrar</h1>
     </div>
   )
 };
