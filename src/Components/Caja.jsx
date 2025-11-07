@@ -8,7 +8,8 @@ const Caja = ({
 }) => {
 
 const [ valorCodigo , setValorCodigo ] = useState(null);
-const [ search, setSearch ] = useState([])
+const [ search, setSearch ] = useState([]);
+const [ carrito, setCarrito ] = useState([]);
 
 useEffect(() => {
   console.log(db)
@@ -25,6 +26,16 @@ const buscarProducto = (item) => {
   setSearch(resultados);
 };
 
+useEffect(() => {
+  if(search.length === 1){
+    setCarrito((prev) => [...prev, search[0]])
+  }
+},[search])
+
+useEffect(() => {
+  console.log(carrito)
+},[carrito])
+
  // detecta si se escaneo algun numero
 useEffect(() => {
     if (numero && numero !== 0) {
@@ -33,6 +44,10 @@ useEffect(() => {
         buscarProducto(numero)
     }
 }, [numero]);
+
+const addCarrito = () => {
+
+}
 
   return (
     <div className='contenedor-caja'>
@@ -52,10 +67,10 @@ useEffect(() => {
     </div>
       <div className='lista-productos'>
         {
-          search.length > 0 
+          carrito.length > 0 
           ?
-          search.map(item => (
-            <div className='items-cobrar'>
+          carrito.map(item => (
+            <div className='items-cobrar' key={item.codigo}>
               <p>{item.descripcion}</p>
               <p>
                 {
