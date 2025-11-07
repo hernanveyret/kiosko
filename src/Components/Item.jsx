@@ -15,8 +15,26 @@ const Item = ({
         <p><span className="titulo-oculto">Codigo:</span>{item.codigo}</p>
         <p><span className="titulo-oculto">Descripcion: </span>{item.descripcion}</p>
         <p><span className="titulo-oculto">Peso/Ltro: </span>{item.tamano}</p>
-        <p><span className="titulo-oculto">Precio Unit: </span>${item.precio}</p>
-        <p><span className="titulo-oculto">Precio Off: </span>{item.precioOff}</p>
+        <p><span className="titulo-oculto">Precio:</span>
+          {
+            Number(item.precio).toLocaleString('es-AR', {
+              style: 'currency',
+              currency: 'ARS',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0
+            })
+          }
+        </p>        
+        <p><span className="titulo-oculto">Oferta </span>
+          {
+            Number(item.precioOff).toLocaleString('es-AR', {
+              style: 'currency',
+              currency: 'ARS',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0
+            })
+          }
+        </p>
         <p><span className="titulo-oculto">Stock: </span>{item.stock}</p>
       </div>
       <div className='item-btn'>
