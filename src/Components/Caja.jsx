@@ -5,6 +5,7 @@ import './caja.css';
 const Caja = ({
                 db,
                 numero,
+                setNumero,
                 setIsOnCamara,
                 isOnCamara
 }) => {
@@ -55,7 +56,11 @@ const addCarrito = () => {
     <div className='contenedor-caja'>
       {
         isOnCamara  &&
-          <Lector />
+          <Lector 
+          setNumero={setNumero}
+          numero={numero}
+          setIsOnCamara={setIsOnCamara}
+          />
       }
         <h3>Lista de productos</h3>
     <div className="buscador-producto">

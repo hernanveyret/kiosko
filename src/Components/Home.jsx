@@ -89,8 +89,11 @@ const Home = () => {
               <Caja 
                 db={db}
                 numero={numero}
+                setNumero={setNumero}
                 setIsOnCamara={setIsOnCamara}
                 isOnCamara={isOnCamara}
+  
+  
               />
           }
         </section>
