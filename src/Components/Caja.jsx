@@ -117,6 +117,7 @@ const valor = navRef.current
                 </p>
                 <p>
                   {
+                    item.precioOff &&
                     Number(item.precioOff).toLocaleString('es-AR', {
                       style: 'currency',
                       currency: 'ARS',
