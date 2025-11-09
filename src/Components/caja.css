@@ -8,7 +8,7 @@
 h3  {
   text-align: center;
 }
-.productos-encontrados {
+.productos-buscados {
   display: flex;
   flex-direction: column;
 }
@@ -99,6 +99,9 @@ h3  {
   margin-right: 10px;
 }
 
+.close {
+  display: none;
+}
 @media (max-width: 500px) {
   .importe {
     width: 95%;

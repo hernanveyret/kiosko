@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Lector from './Lector';
 import './caja.css';
 
@@ -17,13 +17,7 @@ const [ carrito, setCarrito ] = useState([]);
 const [ subtotal, setSubTotal ] = useState(0);
 const [ error, setError ] = useState(false);
 
-useEffect(() => {
-  console.log(db)
-},[db])
-
-useEffect(() => {
-  console.log(search)
-},[search])
+const navRef = useRef(null)
 
 const buscarProductoCam = (item) => {  
   const resultados = db.filter(e =>
@@ -32,19 +26,18 @@ const buscarProductoCam = (item) => {
   setSearch(resultados);
 };
 
-
 useEffect(() => {
   if(search.length === 1){
-    setCarrito((prev) => [...prev, {...search[0], cantidad: 1}])
-    setSubTotal((prev) => prev + Number(search.precio))
+    setCarrito((prev) => [...prev, {...search[0], cantidad: 1}])    
   }
 },[search])
 
-
 useEffect(() => {
-  console.log(carrito)
-  console.log(subtotal)
-},[carrito])
+    const nuevoSubtotal = carrito.reduce((acumulador, itemActual) => {
+        return acumulador + Number(itemActual.precio) * Number(itemActual.cantidad);
+    }, 0);
+    setSubTotal(nuevoSubtotal);    
+}, [carrito]);
 
  // detecta si se escaneo algun numero
 useEffect(() => {
@@ -56,24 +49,24 @@ useEffect(() => {
 }, [numero]);
 
 const buscarProductoTeclado = (item) => {
+  const valor = navRef.current
+  valor.classList.remove('close')
   const resultados = db.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
   setBuscar(resultados)
 }
 
+
 const addCarrito = (i) => {
+const valor = navRef.current
   if(buscar){
     setValorCodigo('');
     setCarrito((prev) => [...prev, { ...buscar[i], cantidad: 1 }]);
     setBuscar([]);
+    valor.classList.add('close')
   }
 }
-
-useEffect(() => {
-  console.log(buscar)
-  console.log(valorCodigo)
-},[buscar])
 
   return (
     <div className='contenedor-caja'>
@@ -103,7 +96,7 @@ useEffect(() => {
         Ecanear Codigo
       </button>
         </div>
-      <nav className="productos-encontrados">
+      <nav className="productos-buscados close" ref={navRef}>
         {
           buscar &&
             buscar.map((item, i) => (
@@ -156,7 +149,7 @@ useEffect(() => {
             </div>
           ))
           :
-          <p>Aun no hay productos para cobrar</p>
+          <p style={{textAlign:'center', color:'grey', padding:'10px'}}>Aun no hay productos para cobrar</p>
         }
       </div>
       <div className='importe'>
