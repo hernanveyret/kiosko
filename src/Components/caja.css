@@ -8,13 +8,26 @@
 h3  {
   text-align: center;
 }
-.buscador-producto {
+.productos-encontrados {
   display: flex;
+  flex-direction: column;
+}
+.search-productos {
+  display: flex;
+  gap: 10px;
+}
+.buscador-producto {
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 .items-cobrar {
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 95%;
   background-color: rgb(230, 222, 222);
   margin: 2.5px auto;
@@ -22,7 +35,7 @@ h3  {
 .items-cobrar div:nth-child(1){
   display: flex;
   gap: 10px;
-  width: 60%;
+  width: 50%;
   display: flex;
   justify-content: flex-start;
   padding-left: 5px;
@@ -43,16 +56,16 @@ h3  {
   padding-right: 5px;
 }
 .btn-cobrar {
-  width: 15%;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 5px;
 }
 .btn-cobrar button {
-   width: 35px;
-  height: 35px;
-  font-size: 16px;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
