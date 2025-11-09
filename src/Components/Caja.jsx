@@ -19,6 +19,8 @@ const [ error, setError ] = useState(false);
 
 const navRef = useRef(null)
 
+console.log(db)
+
 const buscarProductoCam = (item) => {  
   const resultados = db.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
@@ -96,23 +98,42 @@ const valor = navRef.current
         Ecanear Codigo
       </button>
         </div>
-      <nav className="productos-buscados close" ref={navRef}>
+      <section className="productos-buscados close" ref={navRef}>
         {
           buscar &&
             buscar.map((item, i) => (
               <div className='search-productos' key={item.codigo} >
                 <p>#{i+1}</p>
                 <p>{item.descripcion}</p>
-                <p>{item.precio}</p>
-                <p>{item.precioOferta}</p>
+                <p>
+                  {
+                  Number(item.precio).toLocaleString('es-AR', {
+                  style: 'currency',
+                  currency: 'ARS',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                  })
+                }
+                </p>
+                <p>
+                  {
+                    Number(item.precioOff).toLocaleString('es-AR', {
+                      style: 'currency',
+                      currency: 'ARS',
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 0
+                    })
+                  }
+                </p>
                 <button
                   type='button'
+                  className='btn-add-item'
                   onClick={() => addCarrito(i)}
                 >+</button>
               </div>
             ))
           }
-      </nav>
+      </section>
         </div>
       <div className='lista-productos'>
         {
@@ -123,6 +144,7 @@ const valor = navRef.current
               <div>
               <p>#{i+1} -</p>
               <p>{item.descripcion}</p>
+              <p>{item.tamano}</p>
             </div>
             <div>
               <p>{item.cantidad}</p>
