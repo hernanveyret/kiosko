@@ -2,8 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 200px;
-  
+  min-height: 200px;
+  border: 1px solid red;
 }
 h3  {
   text-align: center;
@@ -103,7 +103,7 @@ h3  {
 
 .importe {
   background-color: black;
-  width: 30%;
+  width: 95%;
   min-height: 100px;
   margin: 10px auto;
   border-radius: 10px;
@@ -124,9 +124,15 @@ h3  {
 .close {
   display: none;
 }
-@media (max-width: 500px) {
+/*
+@media (max-width: 1200px) {
   .importe {
-    width: 95%;
+    width: 35%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
+  .contenedor-caja {
+    display: flex;
+    flex-direction: row;
+  }
 }
+  */

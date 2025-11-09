@@ -125,13 +125,25 @@ return (
         <input type="text" name="precioOferta" 
         {...register('precioOff', {
           required: {
-            value: true,
+            value: false,
             message:'Campo Obligatorio'
           }          
         })}
         />
         </label>
         { errors.precioOff?.message && <p className='text-error'>{errors.precioOff.message}</p>}
+
+        <label>Cantidad Oferta
+        <input type="text" name="id"
+        {...register('cantidadOferta', {
+          required: {
+            value: false,
+            message: 'Campo Obligatorio'
+          }
+        })}
+        />
+        </label>
+        { errors.cantidadOferta?.message && <p className='text-error'>{errors.cantidadOferta.message}</p>}
 
         <label>Stock
         <input type="text" name="stock" 
