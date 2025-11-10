@@ -25,7 +25,7 @@ useEffect(() => {
     setValue('cantidadOferta', filtro.cantidadOferta)
     setValue('stock', filtro.stock)
     */
-   
+
    // resetea todos los campos u como los nombres de las propiedades son iguales
    // a los campos de register se agregan automaticamente con reset.
   if (filtro) {
@@ -44,9 +44,16 @@ const {
 
 
 const cargarProducto = (data) => {
+  const productoEditado = {...data}
+  Object.keys(productoEditado).forEach(key => {
+    if(data[key] === '' ){
+      data[key] = null
+    }
+  })
+
   const filtro = productos.filter(item => item.codigo !== idCodigo)
   if(filtro){
-    filtro.push(data);
+    filtro.push(productoEditado);
     setProductos(filtro)
   }
   setIdCodigo(null)
