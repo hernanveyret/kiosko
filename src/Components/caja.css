@@ -85,12 +85,10 @@ h3  {
 .btn-cobrar button, .btn-add-item {
   width: 30px;
   height: 30px;
-  font-size: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   background: white;
-  padding: 10px;
   border: none;
   background-color: black;
   color: white;

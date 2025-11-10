@@ -116,6 +116,24 @@ transition: .3s ease-in-out;
     margin-right: .5rem;
     color: black !important;
   }
+  .item-btn {
+    gap: 30px;
+  }
+  .btn-item {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+  box-shadow: 2px 2px 4px blac
+  }
   .header-oculto {
   display: none;
 }
