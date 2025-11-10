@@ -27,7 +27,8 @@ const Item = ({
               maximumFractionDigits: 0
             })
           }
-        </p>        
+        </p>
+        { item.precioOff &&
         <p><span className="titulo-oculto">Oferta</span>
           { item.cantidadOferta}
           x
@@ -40,6 +41,7 @@ const Item = ({
             })
           }
         </p>
+              }
         <p><span className="titulo-oculto">Stock: </span>{item.stock}</p>
       </div>
       <div className='item-btn'>
