@@ -1,0 +1,71 @@
+.contenedor-editar-item {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  background-color: rgba(0, 128, 68, 0.76);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contenedor-form {
+  width: 50%;
+  height: auto;
+  border-radius: 20px;
+  position: relative;
+  background-color: rgb(125, 173, 148);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contenedor-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.btn-editar-item {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+    width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+  box-shadow: 2px 2px 4px black;
+}
+.btn-cargar-editar {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border: none;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: .2s ease-in-out;
+  box-shadow: 2px 2px 4px black;
+}
+.contenedor-form form input:active {
+  border: 1px solid greenyellow;
+}
+@media (max-width: 500px) {
+  .contenedor-form {
+    width: 90%;
+  }
+  .contenedor-form form {
+    width: 70%;
+  }
+
+}

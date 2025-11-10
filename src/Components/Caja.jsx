@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Lector from './Lector';
+import EditItemCaja from './EditItemCaja';
 import './caja.css';
+import './editItemCaja.css';
 
 const Caja = ({
                 db,
@@ -15,7 +17,8 @@ const [ search, setSearch ] = useState([]);
 const [ buscar, setBuscar ] = useState([]);
 const [ carrito, setCarrito ] = useState([]);
 const [ subtotal, setSubTotal ] = useState(0);
-const [ error, setError ] = useState(false);
+const [ isEditItem, setIsEditItem ] = useState(false);
+const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
 
 const navRef = useRef(null)
 
@@ -70,6 +73,15 @@ const valor = navRef.current
   }
 }
 
+const borrarDelCarrito = (id) => {
+  console.log(id)
+  const filtrar = carrito.filter(item => item.codigo !== id )
+
+  if(filtrar){
+    setCarrito(filtrar)
+  }
+}
+
   return (
     <div className='contenedor-caja'>
       {
@@ -78,6 +90,16 @@ const valor = navRef.current
           setNumero={setNumero}
           numero={numero}
           setIsOnCamara={setIsOnCamara}
+          />
+      }
+      {
+        isEditItem &&
+          <EditItemCaja 
+            carrito={carrito}
+            setCarrito={setCarrito}
+            idCodigoEditar={idCodigoEditar}
+            setIdCodigoEditar={setIdCodigoEditar}
+            setIsEditItem={setIsEditItem}
           />
       }
         <h3>Lista de productos</h3>
@@ -163,7 +185,10 @@ const valor = navRef.current
               </p>
             </div>
             <div className="btn-cobrar">
-              <button>
+              <button
+                type='Editar'
+                onClick={() => { setIsEditItem(true) } }
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" 
                   height="20px" 
                   viewBox="0 -960 960 960" 
@@ -172,7 +197,10 @@ const valor = navRef.current
                     <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z"/>
                 </svg>
               </button>
-              <button>
+              <button
+                type='Borrar'
+                onClick={() => { borrarDelCarrito(item.codigo)}}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" 
                   height="20px" 
                   viewBox="0 -960 960 960" 
