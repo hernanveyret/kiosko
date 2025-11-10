@@ -44,6 +44,26 @@ const {
 
 
 const cargarProducto = (data) => {
+  // Limpieza de campos vacíos
+  const productoEditado = { ...data };
+  Object.keys(productoEditado).forEach(key => {
+    if (productoEditado[key] === '' || productoEditado[key] === '0') {
+      productoEditado[key] = null;
+    }
+  });
+
+  setProductos(prev =>
+    prev.map(item =>
+      item.codigo === idCodigo ? productoEditado : item
+    )
+  );
+
+  setIdCodigo(null);
+  setIsEditarProducto(false);
+  setIsLista(true);
+};
+/*
+const cargarProducto = (data) => {
   const productoEditado = {...data}
   Object.keys(productoEditado).forEach(key => {
     if(data[key] === '' ){
@@ -61,7 +81,7 @@ const cargarProducto = (data) => {
   setIsLista(true)
   
 }
-
+*/
 /*
 const cargarProducto = (data) => {
   if (!archivoOriginal) return;
