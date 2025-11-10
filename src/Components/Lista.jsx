@@ -9,7 +9,10 @@ const Lista = ({
                 numero,
                 setNumero,
                 setIsOnCamara,
-                isOnCamara
+                isOnCamara,
+                setIsEditarProducto,
+                setIsLista,
+                setIdCodigo
               }) => {
 const [ codigo, setCodigo ] = useState(null);
 const [ search, setSearch ] = useState([])
@@ -88,6 +91,9 @@ return (
               key={i}
               item={item}
               eliminarProducto={eliminarProducto}
+              setIsEditarProducto={setIsEditarProducto}
+              setIsLista={setIsLista}
+              setIdCodigo={setIdCodigo}
               />
           )) 
           :
@@ -97,6 +103,9 @@ return (
               key={i}
               item={item}
               eliminarProducto={eliminarProducto}
+              setIsEditarProducto={setIsEditarProducto}
+              setIsLista={setIsLista}
+              setIdCodigo={setIdCodigo}
               />
           ))
           :
