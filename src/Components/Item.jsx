@@ -28,7 +28,9 @@ const Item = ({
             })
           }
         </p>        
-        <p><span className="titulo-oculto">Oferta </span>
+        <p><span className="titulo-oculto">Oferta</span>
+          { item.cantidadOferta}
+          x
           {
             Number(item.precioOff).toLocaleString('es-AR', {
               style: 'currency',

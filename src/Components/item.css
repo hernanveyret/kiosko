@@ -28,6 +28,7 @@
   height: 30px;  
   padding-left: .5rem;
 }
+
 .item-info p:nth-child(1) {
   width: 15%;
 }
@@ -94,6 +95,9 @@ transition: .3s ease-in-out;
     display: flex;    
   }
 
+  .item-info p:nth-child(2) {
+  flex-wrap: wrap;
+  }
   .item-info p:nth-child(4) {
   font-size: 20px;
   font-weight: bold;

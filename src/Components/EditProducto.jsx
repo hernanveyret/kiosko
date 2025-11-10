@@ -2,19 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import './ingresar.css'
-const EditProducto = ({ db,
+const EditProducto = ({ productos,
                         setIsEditarProducto,
-                        idCodigo
+                        idCodigo,
+                        setIdCodigo,
+                        setIsLista,
+                        setProductos
                       }) => { 
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
 const [ productoViejo, setProductoViejo ] = useState(null)
 
-console.log(db)
 useEffect(() => {
-  console.log('id codigo del producto:', idCodigo)
   if(idCodigo){
-    const filtro = db.find(item => item.codigo === idCodigo);
-    setProductoViejo(filtro);
+    const filtro = productos.find(item => item.codigo === idCodigo);
+    setArchivoOriginal(filtro.img)
     /*
     setValue('codigo', filtro.codigo )
     setValue('descripcion', filtro.descripcion)
@@ -25,17 +26,13 @@ useEffect(() => {
     setValue('stock', filtro.stock)
     */
    
+   // resetea todos los campos u como los nombres de las propiedades son iguales
+   // a los campos de register se agregan automaticamente con reset.
   if (filtro) {
     reset(filtro);
   }
-
-
   }
 },[idCodigo]);
-
-useEffect(() => {
-  console.log('Producto a editar: ', productoViejo)
-},[productoViejo])
 
 const {
   register,
@@ -46,8 +43,16 @@ const {
 } = useForm()
 
 
-const cargarProducto = (data) => { 
-  console.log(data)
+const cargarProducto = (data) => {
+  const filtro = productos.filter(item => item.codigo !== idCodigo)
+  if(filtro){
+    filtro.push(data);
+    setProductos(filtro)
+  }
+  setIdCodigo(null)
+  setIsEditarProducto(false)
+  setIsLista(true)
+  
 }
 
 /*

@@ -71,9 +71,12 @@ const Home = () => {
           {
             isEditarProducto &&
               <EditProducto 
-                db={db}
+                productos={productos}
                 setIsEditarProducto={setIsEditarProducto}
                 idCodigo={idCodigo}
+                setIdCodigo={setIdCodigo}
+                setProductos={setProductos}
+                setIsLista={setIsLista}
               />
           }
           {
