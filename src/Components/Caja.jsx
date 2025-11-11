@@ -124,8 +124,7 @@ const borrarDelCarrito = (id) => {
           buscar &&
             buscar.map((item, i) => (
               <div className='search-productos' key={item.codigo} >
-                <p>#{i+1}</p>
-                <p>{item.descripcion}</p>
+                <p>#{i+1} {item.descripcion} {item.tamano}</p>
                 <p>
                   {
                   Number(item.precio).toLocaleString('es-AR', {
