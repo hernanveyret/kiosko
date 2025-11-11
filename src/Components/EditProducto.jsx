@@ -57,7 +57,6 @@ const cargarProducto = (data) => {
       item.codigo === idCodigo ? productoEditado : item
     )
   );
-
   setIdCodigo(null);
   setIsEditarProducto(false);
   setIsLista(true);

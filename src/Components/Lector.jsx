@@ -3,7 +3,7 @@ import './lector.css';
 
 // Importación condicional del fallback para el detector de código de barras
 // NOTA: Se asume que @zxing/library ya está instalado localmente.
-
+// intalar @zxing/library: npm install @zxing/library para la deteccion de codigos de barra
 const Lector = ({ 
   setNumero,
   numero,

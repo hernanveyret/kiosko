@@ -5,7 +5,7 @@ import './caja.css';
 import './editItemCaja.css';
 
 const Caja = ({
-                db,
+                productos,
                 numero,
                 setNumero,
                 setIsOnCamara,
@@ -22,10 +22,10 @@ const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
 
 const navRef = useRef(null)
 
-console.log(db)
+
 
 const buscarProductoCam = (item) => {  
-  const resultados = db.filter(e =>
+  const resultados = productos.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
   setSearch(resultados);
@@ -56,7 +56,7 @@ useEffect(() => {
 const buscarProductoTeclado = (item) => {
   const valor = navRef.current
   valor.classList.remove('close')
-  const resultados = db.filter(e =>
+  const resultados = productos.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
   setBuscar(resultados)

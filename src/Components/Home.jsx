@@ -107,7 +107,7 @@ const Home = () => {
           {
             isCaja &&
               <Caja 
-                db={db}
+                productos={productos}
                 numero={numero}
                 setNumero={setNumero}
                 setIsOnCamara={setIsOnCamara}
