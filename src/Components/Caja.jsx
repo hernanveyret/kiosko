@@ -17,12 +17,11 @@ const [ search, setSearch ] = useState([]);
 const [ buscar, setBuscar ] = useState([]);
 const [ carrito, setCarrito ] = useState([]);
 const [ subtotal, setSubTotal ] = useState(0);
+const [ cantidad, setCantidad ] = useState(0);
 const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
 
-const navRef = useRef(null)
-
-
+const navRef = useRef(null);
 
 const buscarProductoCam = (item) => {  
   const resultados = productos.filter(e =>
@@ -42,6 +41,9 @@ useEffect(() => {
         return acumulador + Number(itemActual.precio) * Number(itemActual.cantidad);
     }, 0);
     setSubTotal(nuevoSubtotal);    
+
+    const cantidadProductos = carrito.reduce((acc, cant) => Number(acc) + Number(cant.cantidad), 0)
+    setCantidad(cantidadProductos)
 }, [carrito]);
 
  // detecta si se escaneo algun numero
@@ -61,7 +63,6 @@ const buscarProductoTeclado = (item) => {
   );
   setBuscar(resultados)
 }
-
 
 const addCarrito = (i) => {
 const valor = navRef.current
@@ -184,7 +185,10 @@ const borrarDelCarrito = (id) => {
             <div className="btn-cobrar">
               <button
                 type='Editar'
-                onClick={() => { setIsEditItem(true) } }
+                onClick={() => { 
+                  setIdCodigoEditar(item.codigo)
+                  setIsEditItem(true) 
+                } }
               >
                 <svg xmlns="http://www.w3.org/2000/svg" 
                   height="20px" 
@@ -225,6 +229,9 @@ const borrarDelCarrito = (id) => {
             })
           }
         </span>
+        </p>
+        <p>Cantidad:
+          <span>{cantidad}</span>
         </p>
       </div>
       </div>

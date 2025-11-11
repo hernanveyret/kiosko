@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { useForm } from 'react-hook-form';
 const EditItemCaja = ({
                         carrito,
                         setCarrito,
@@ -7,6 +7,42 @@ const EditItemCaja = ({
                         setIdCodigoEditar,
                         setIsEditItem,
                     }) => {
+  const {
+    register,
+    reset,
+    handleSubmit,
+    setValue,
+    formState: { errors }  
+  } = useForm()
+
+  useEffect(() => {
+    console.log('Carrito: ', carrito)
+  },[carrito])
+
+  useEffect(() => {
+    console.log('Id codigo a editar: ', idCodigoEditar)    
+      const filtro = carrito.find(item => item.codigo === idCodigoEditar);
+      if(filtro){
+        setValue('cantidad', filtro.cantidad)
+        setValue('precio', filtro.precio)
+      }else{
+        setValue('cantidad', null)
+        setValue('precio', null)
+      }    
+  },[idCodigoEditar])
+
+  const editarItem = (data) => {
+    console.log(data)
+    setCarrito((prev) => 
+      prev.map(item => item.codigo === idCodigoEditar 
+        ? 
+        {...item, cantidad: data.cantidad, precio: data.precio } 
+        : 
+        item)
+    )
+    setIdCodigoEditar(null)
+    setIsEditItem(false)
+  }
 
   return (
     <div 
@@ -18,11 +54,28 @@ const EditItemCaja = ({
           className='btn-editar-item'
           onClick={() => { setIsEditItem(false) } }
         >X</button>
-        <form>
-          <input type='text' placeholder='Cantidad...' />
-          <input type='text' placeholder='Precio...' />           
+        <form
+          onSubmit={handleSubmit(editarItem)}
+        >
+           <input type="text" name="cantidad"
+             {...register('cantidad', {
+                  required: {
+                  value: false,
+                  message: 'Campo Obligatorio'
+                }
+            })}
+            />
+          
+            <input type="text" name="precio"
+             {...register('precio', {
+                  required: {
+                  value: false,
+                  message: 'Campo Obligatorio'
+                }
+            })}
+            />
           <button
-            type='button'
+            type='submit'
             className='btn-cargar-editar'
           >
             CARGAR
