@@ -61,7 +61,9 @@ const buscarProductoTeclado = (item) => {
   const resultados = productos.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
-  setBuscar(resultados)
+  if(resultados.length > 0 ){
+    setBuscar(resultados)
+  }setBuscar([])
 }
 
 const addCarrito = (i) => {
