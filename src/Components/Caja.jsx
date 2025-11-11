@@ -58,12 +58,18 @@ useEffect(() => {
 const buscarProductoTeclado = (item) => {
   const valor = navRef.current
   valor.classList.remove('close')
+
+  if (item.trim() === '') {
+    setBuscar([]); 
+    return;
+  }
+  
   const resultados = productos.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
   if(resultados.length > 0 ){
     setBuscar(resultados)
-  }setBuscar([])
+  }
 }
 
 const addCarrito = (i) => {
