@@ -62,6 +62,7 @@ h3  {
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .items-cobrar div:nth-child(3){
@@ -121,15 +122,24 @@ h3  {
 .close {
   display: none;
 }
-/*
-@media (max-width: 1200px) {
+
+@media (min-width: 1200px) {
   .importe {
     width: 35%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   .contenedor-caja {
     display: flex;
-    flex-direction: row;
+  }
+  
+  .contenedor-pc {
+    display: flex;
+  }
+  .lista-productos {
+    width: 80%
+  }
+  .importe {
+    margin: 0 10px 0 0;
   }
 }
-  */
+  

@@ -105,7 +105,6 @@ const borrarDelCarrito = (id) => {
         <h3>Lista de productos</h3>
     <div className="buscador-producto">
       <div className='nav-buscador'>
-
       <input type="text" 
       placeholder='Buscar...'
       value={valorCodigo}
@@ -158,6 +157,7 @@ const borrarDelCarrito = (id) => {
           }
       </section>
         </div>
+      <div className="contenedor-pc">
       <div className='lista-productos'>
         {
           carrito.length > 0 
@@ -165,9 +165,7 @@ const borrarDelCarrito = (id) => {
           carrito.map((item, i) => (
             <div className='items-cobrar' key={item.codigo}>
               <div>
-              <p>#{i+1} -</p>
-              <p>{item.descripcion}</p>
-              <p>{item.tamano}</p>
+              <p>#{i+1} - {item.descripcion} {item.tamano}</p>
             </div>
             <div>
               <p>{item.cantidad}</p>
@@ -229,6 +227,7 @@ const borrarDelCarrito = (id) => {
           }
         </span>
         </p>
+      </div>
       </div>
     </div>
   )
