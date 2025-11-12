@@ -21,10 +21,6 @@ const [ cantidad, setCantidad ] = useState(0);
 const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
 
-useEffect(() => {
-  setNumero(null)
-},[])
-
 const navRef = useRef(null);
 
 const buscarProductoCam = (item) => {  
