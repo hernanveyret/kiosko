@@ -65,6 +65,7 @@ const Home = () => {
             className="btn-nav"
             onClick={() => {
               setValorCodigo('');
+              setNumero('')
               setIsLista(false);
               setIsIngresar(false);
               setIsCaja(true);
