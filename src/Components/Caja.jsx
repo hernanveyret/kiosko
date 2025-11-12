@@ -21,6 +21,13 @@ const [ cantidad, setCantidad ] = useState(0);
 const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
 
+useEffect(() => {
+   setNumero('')
+},[])
+useEffect(() => {
+   setValorCodigo('')
+},[])
+
 const navRef = useRef(null);
 
 const buscarProductoCam = (item) => {  
@@ -89,10 +96,6 @@ const borrarDelCarrito = (id) => {
     setCarrito(filtrar)
   }
 }
-
-useEffect(() => {
-   setValorCodigo('')
-},[])
 
   return (
     <div className='contenedor-caja'>
