@@ -22,7 +22,7 @@ const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
 
 useEffect(() => {
-  setValorCodigo(null)
+  setNumero(null)
 },[])
 
 const navRef = useRef(null);
