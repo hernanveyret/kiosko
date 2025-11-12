@@ -75,6 +75,7 @@ const buscarProductoTeclado = (item) => {
 const addCarrito = (i) => {
 const valor = navRef.current
   if(buscar){
+    
     setValorCodigo('');
     setCarrito((prev) => [...prev, { ...buscar[i], cantidad: 1 }]);
     setBuscar([]);
@@ -83,13 +84,15 @@ const valor = navRef.current
 }
 
 const borrarDelCarrito = (id) => {
-  console.log(id)
-  const filtrar = carrito.filter(item => item.codigo !== id )
-
+  const filtrar = carrito.filter(item => item.codigo !== id );
   if(filtrar){
     setCarrito(filtrar)
   }
 }
+
+useEffect(() => {
+   setValorCodigo('')
+},[])
 
   return (
     <div className='contenedor-caja'>

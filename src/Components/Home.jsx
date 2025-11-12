@@ -37,7 +37,7 @@ const Home = () => {
             title='Agregar Productos'
             className="btn-nav"
             onClick={() => {
-              setValorCodigo(null);
+              setValorCodigo('');
               setIsEditarProducto(false);
               setIsCaja(false);
               setIsLista(false);
@@ -51,7 +51,7 @@ const Home = () => {
             title='Lista de Productos'
             className="btn-nav"
             onClick={() => {
-              setValorCodigo(null);
+              setValorCodigo('');
               setIsEditarProducto(false);
               setIsCaja(false);
               setIsIngresar(false);
@@ -64,7 +64,7 @@ const Home = () => {
             title='Cobrar'
             className="btn-nav"
             onClick={() => {
-              setValorCodigo(null);
+              setValorCodigo('');
               setIsLista(false);
               setIsIngresar(false);
               setIsCaja(true);
