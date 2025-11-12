@@ -12,11 +12,12 @@ const Lista = ({
                 isOnCamara,
                 setIsEditarProducto,
                 setIsLista,
-                setIdCodigo
+                setIdCodigo,
+                valorCodigo,
+                setValorCodigo
               }) => {
 const [ codigo, setCodigo ] = useState(null);
 const [ search, setSearch ] = useState([])
-const [ valorCodigo , setValorCodigo ] = useState(null)
 
 useEffect(() => {
   setNumero(null)

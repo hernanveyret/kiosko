@@ -9,10 +9,10 @@ const Caja = ({
                 numero,
                 setNumero,
                 setIsOnCamara,
-                isOnCamara
+                isOnCamara,
+                valorCodigo,
+                setValorCodigo
 }) => {
-
-const [ valorCodigo , setValorCodigo ] = useState('');
 const [ search, setSearch ] = useState([]);
 const [ buscar, setBuscar ] = useState([]);
 const [ carrito, setCarrito ] = useState([]);
@@ -63,7 +63,7 @@ const buscarProductoTeclado = (item) => {
     setBuscar([]); 
     return;
   }
-  
+
   const resultados = productos.filter(e =>
     e.descripcion.toLowerCase().includes(item.toLowerCase()) || e.codigo.includes(item)
   );
@@ -180,13 +180,21 @@ const borrarDelCarrito = (id) => {
             </div>
             <div>
               <p>
-                {
+                { Number(item.cantidad) === 1 ?
                   Number(item.precio).toLocaleString('es-AR', {
                   style: 'currency',
                   currency: 'ARS',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0
+                  }) 
+                  :
+                  Number(item.precioOff).toLocaleString('es-AR', {
+                  style: 'currency',
+                  currency: 'ARS',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
                   })
+
                 }
               </p>
             </div>
