@@ -42,6 +42,8 @@
   align-items: center;
 }
 
+
+
 .contenedor-form-login {
   width: 55%;
   height: auto;
@@ -102,46 +104,62 @@ input[type="text"]::placeholder {
   background: transparent;
   cursor: pointer;
 }
+@media (max-width: 700px) {
 
-@media (max-width: 500px) {
-.aside-izq { 
-  position: static;
- width: 100%;
- height: 50dvh;
- display: flex;
-  justify-content: center;
-   align-items: flex-start;
-  
-transform: skew(0);
-}
-.contenedor-img {
-  width: 30%;
-  height: 20%;
-  transform: skewX(20deg);
-  position: static;
-  right: auto;
-  top: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transform: skew(0);
-  height: auto;
-  margin-top: 20px;;
-}
+  .contenedor-login {
+    position: static;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;   /* APILAR */
+    align-items: center;
+    justify-content: start;
+    overflow-y: auto;
+    background: white;
+  }
 
+  .aside-izq {
+    position: static;
+    width: 100%;
+    height: 30dvh;
+    background: green;
+    transform: skew(0);    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-.contenedor-img img {
-  transform: skew(0);
-  width: 100%;
-  height: auto;
-}
+  .contenedor-img {
+    width: 40%;
+    height: auto;
+    transform: none;
+    margin: 10px auto;
+    position: static;
+  }
+
+  .contenedor-img img {
+    width: 100%;
+    height: auto;
+    transform: none;
+  }
 
   .aside-der {
+    position: static;
     width: 100%;
-    align-items:flex-end;
+    flex: 1;
+    background-image: linear-gradient(green, white);
+    padding: 20px 0;
   }
+
   .contenedor-form-login {
     width: 90%;
-    margin-bottom: 20px;
+    height: auto;
+    margin: 0 auto;
+  }
+
+  .form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 }

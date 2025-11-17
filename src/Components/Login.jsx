@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-
+import { loginConMail, crearCuentaEmail } from '../firebase/auth.js'
+import { auth } from '../firebase/config.js';
+import { onAuthStateChanged } from 'firebase/auth';
 import './login.css';
 const Login = ({
                 setIsHome,
@@ -15,21 +17,54 @@ const Login = ({
    formState: { errors }  
  } = useForm()
   const [ accion, setAccion ] = useState(false);
+  const [user, setUser] = useState(null);
 
   const refAsideIzq = useRef(null);
   const refAsideDer = useRef(null);
+  
+/*
+  useEffect(() => {
+    // 1. Adjunta el observador
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      // 2. Se ejecuta al inicializar y con cada cambio
+      setUser(currentUser);
+      //setLoading(false); 
+      console.log('Estado de Auth cambiado:', currentUser ? currentUser.uid : 'null');
+    });
 
+    // 3. La función de limpieza se ejecuta al desmontar el componente (o effect)
+    // Esto es CRUCIAL para evitar pérdidas de memoria (memory leaks).
+    return () => unsubscribe(); 
+
+  }, []); // El array de dependencias vacío asegura que se ejecute una sola vez al montar
+
+  return { user };
+};
+*/
   const crearCuenta = (data) => {
     console.log('crear una cuenta')
     console.log(data)
+    if( data.password === data.repetirPassword){
+      const dataUser = {
+      correo: data.mail,
+      password: data.password
+    }  
+    console.log(dataUser)
+    crearCuentaEmail(dataUser)
+    }
   }
 
   const ingresar = (data) => {
-    console.log('ingresar a tu cuenta')
     console.log(data)
+    const dataUser = {
+      correo: data.mail,
+      password: data.password
+    } 
+    loginConMail(dataUser)
     setIsHome(true)
     setIsLogin(false)
   }
+
   return (
     <div
       className='contenedor-login'>
@@ -115,7 +150,6 @@ const Login = ({
               >
                 ENTRAR
               </button>
-              </form>
               {
                 !accion
                 ?
@@ -131,6 +165,8 @@ const Login = ({
                   onClick={() => setAccion(false)}
                    >Volver</button>
               }
+              </form>
+              
         
                  </div>
         </div>
