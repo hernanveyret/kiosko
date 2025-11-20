@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-
+import { agregarProducto } from '../firebase/auth.js';
 import Lector from './Lector';
 import './ingresar.css'
 const Ingresar = ({ 
@@ -9,10 +9,13 @@ const Ingresar = ({
                   setProductos,
                   productos,
                   numero,
-                  setNumero
+                  setNumero,
+                  idDoc
                 }) => {  
 
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
+const [ url, setUrl ] = useState('');
+const [ isPublicId, setIsPublicId ] = useState(null);
 
 const {
   register,
@@ -31,6 +34,94 @@ useEffect(() => {
     }
 }, [numero, setValue]);
 
+const cargarProducto = async (data) => {
+   if (!archivoOriginal) {
+    alert('Debe seleccionar una imagen')
+    return;
+  }
+
+  const urlFinal = await handleChange(); // convierte la imagen a webp y la sube a cloudinary, la guarda 
+          // en una variable para usarla en la url del nuevoProducto, asi siempre va a usar la url correcta.  
+    const nuevoProducto = {
+      codigo: data.codigo,
+      descripcion: data.descripcion,
+      precio: data.precio,
+      precioOff: data.precioOff,
+      tamano: data.tamano,
+      cantidadOferta: data.cantidadOferta,
+      stock: data.stock,
+      img: urlFinal
+    }
+   await agregarProducto(idDoc, nuevoProducto)
+}
+
+const handleChange = async (e) => {        
+    if (!archivoOriginal) return;
+    //console.log('cargando el archivo: ', archivoOriginal)
+    const webpBlob = await convertirAWebP(archivoOriginal);
+    const urlWebP = await subirACloudinary(webpBlob, archivoOriginal.name);
+    return urlWebP
+  };
+
+  const convertirAWebP = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        img.src = e.target.result;
+      };
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(
+          (blob) => {
+            resolve(blob);
+          },
+          "image/webp",
+          0.8 // calidad
+        );
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const subirACloudinary = async (webpBlob, originalName) => {
+    // Reemplazar la extensión por .webp
+    const baseName = originalName.split(".").slice(0, -1).join(".");
+    const webpFileName = `${baseName}.webp`;
+
+    const formData = new FormData();
+    formData.append("file", webpBlob, webpFileName);
+    formData.append("upload_preset", "carrito_upload");
+    formData.append("folder", `kioscos/${idDoc}`);
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dujru85ae/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.secure_url) {
+      setIsPublicId(data.public_id)
+      return data.secure_url;
+    } else {
+      console.error("Error al subir:", data);
+      return null;
+    }
+  };
+
+
+/*
 const cargarProducto = (data) => {
   if (!archivoOriginal) return;
 
@@ -48,10 +139,10 @@ const cargarProducto = (data) => {
     // Reiniciar formulario
     reset();
   };
-
   // ¡Muy importante! Esto inicia la lectura del archivo
   reader.readAsDataURL(archivoOriginal);
 };
+*/
 
 return (
     <div className='contenedor-ingresar'>

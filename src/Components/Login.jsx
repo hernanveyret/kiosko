@@ -1,12 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { loginConMail, crearCuentaEmail } from '../firebase/auth.js'
+import { loginConMail, crearCuentaEmail, loginWhihtGoogle } from '../firebase/auth.js'
 import { auth } from '../firebase/config.js';
 import { onAuthStateChanged } from 'firebase/auth';
 import './login.css';
 const Login = ({
-                setIsHome,
-                setIsLogin
+                setUsuarioLogueado,
+                usuarioLogueado,
+                errorUsuario,
+                setErrorUsuario,
               }) => {
 
  const {
@@ -17,52 +19,52 @@ const Login = ({
    formState: { errors }  
  } = useForm()
   const [ accion, setAccion ] = useState(false);
-  const [user, setUser] = useState(null);
-
+  const [ abrirCerrarOjos, setAbrirCerrarOjos ] = useState(false) 
+  const [ errorMail, setErrorMail ] = useState('');
+  
   const refAsideIzq = useRef(null);
   const refAsideDer = useRef(null);
   
-/*
-  useEffect(() => {
-    // 1. Adjunta el observador
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      // 2. Se ejecuta al inicializar y con cada cambio
-      setUser(currentUser);
-      //setLoading(false); 
-      console.log('Estado de Auth cambiado:', currentUser ? currentUser.uid : 'null');
-    });
 
-    // 3. La función de limpieza se ejecuta al desmontar el componente (o effect)
-    // Esto es CRUCIAL para evitar pérdidas de memoria (memory leaks).
-    return () => unsubscribe(); 
+const crearCuenta = async (data) => {
+  console.log('crear una cuenta');
+  console.log(data);
 
-  }, []); // El array de dependencias vacío asegura que se ejecute una sola vez al montar
-
-  return { user };
-};
-*/
-  const crearCuenta = (data) => {
-    console.log('crear una cuenta')
-    console.log(data)
-    if( data.password === data.repetirPassword){
-      const dataUser = {
-      correo: data.mail,
-      password: data.password
-    }  
-    console.log(dataUser)
-    crearCuentaEmail(dataUser)
-    }
+  if (data.password !== data.repetirPassword) {
+    alert("Las contraseñas no coinciden.");
+    return; 
   }
 
+  const dataUser = {
+    nombre: data.nombre,
+    correo: data.mail,
+    password: data.password
+  };
+
+  try {
+    const user = await crearCuentaEmail(dataUser);    
+    console.log('Usuario creado y logueado:', user);    
+  } catch (error) {
+    console.error('Error capturado en el componente:', error);
+    setErrorUsuario(error.code)
+    if (error.code === 'auth/email-already-in-use') {
+        setErrorMail('El correo ya existe.')
+    } else {
+      alert('Ocurrió un error al crear la cuenta. Intente de nuevo.');
+    }
+  }
+};
+
+
+
   const ingresar = (data) => {
-    console.log(data)
+    //console.log(data)
     const dataUser = {
+      nombre: data.nombre,
       correo: data.mail,
       password: data.password
     } 
     loginConMail(dataUser)
-    setIsHome(true)
-    setIsLogin(false)
   }
 
   return (
@@ -82,7 +84,7 @@ const Login = ({
             >
               { 
                 accion && 
-                <input type='text' name='nombre' 
+                <input type='text' name='nombre' placeholder='Nombre...'
                   {...register('nombre', {
                     required: {
                       value: true,
@@ -91,7 +93,7 @@ const Login = ({
                   }) }
                 /> 
               }
-              <input type="mail" name='mail' 
+              <input type="mail" name='mail' placeholder='Email...'
                 {...register('mail', {
                   required: {
                     value: true,
@@ -100,9 +102,15 @@ const Login = ({
                 })
                 }                
               />
+              { errorMail && <p className='text-error'>{errorMail}</p>}
               { errors.mail?.message && <p className='text-error'>{errors.mail.message}</p>}
               <span className='span-password'>
-              <input type='password' name='password' className='password'
+              <input 
+              style={{width:'80%'}}
+              type={abrirCerrarOjos ? 'text': 'password'} 
+              name='password' 
+              placeholder='Contraseña...'
+              className='password'
                 {...register('password', {
                   required: {
                     value: true,
@@ -114,7 +122,11 @@ const Login = ({
               <button
                 type='button'
                 className='btn-ojos'
-              >
+                onClick={() => { setAbrirCerrarOjos(!abrirCerrarOjos)}}
+              > 
+              {
+                abrirCerrarOjos 
+                ?
                 <svg xmlns="http://www.w3.org/2000/svg" 
                   height="24px" 
                   viewBox="0 -960 960 960" 
@@ -122,6 +134,14 @@ const Login = ({
                   fill="#000000">
                     <path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/>
                 </svg>
+                :
+                <img 
+                  width="24" 
+                  height="24" 
+                  src="https://img.icons8.com/external-neu-royyan-wijaya/32/external-eyes-neu-interface-neu-royyan-wijaya.png" 
+                  alt="external-eyes-neu-interface-neu-royyan-wijaya"
+                />
+              }                
               </button>
               </span>
               { errors.password?.message && <p className='text-error'>{errors.password.message}</p>}
@@ -129,7 +149,9 @@ const Login = ({
                   accion && (
                     <>
                       <input
-                        type="password"
+                        style={{width:'80%'}}
+                        type={abrirCerrarOjos ? 'text': 'password'}
+                        placeholder='Repetir contraseña...'
                         {...register("repetirPassword", {
                           required: {
                             value: true,
@@ -137,7 +159,6 @@ const Login = ({
                           },
                         })}
                       />
-
                       {errors.repetirPassword?.message && (
                         <p className="text-error">{errors.repetirPassword.message}</p>
                       )}
@@ -148,8 +169,26 @@ const Login = ({
                 type='submit'
                 className='btn-entrar'          
               >
-                ENTRAR
+                { accion ? 'CREAR' : 'ENTRAR' }
               </button>
+              {
+                !accion &&
+                  <button
+                    type='button'
+                    title='Entrar con google'
+                    className='btn-google'
+                    onClick={loginWhihtGoogle}
+                  >
+                    <img 
+                      width="20" 
+                      height="20" 
+                      src="https://img.icons8.com/color/48/google-logo.png" 
+                      alt="google-logo"
+                    />
+                    Entrar con Google
+                  </button>
+              }
+             
               {
                 !accion
                 ?
@@ -163,12 +202,12 @@ const Login = ({
                   type='button'
                   className='btn-crear-cuanta'
                   onClick={() => setAccion(false)}
-                   >Volver</button>
+                >
+                  Volver
+                </button>
               }
-              </form>
-              
-        
-                 </div>
+            </form>        
+          </div>
         </div>
       </div>
   )

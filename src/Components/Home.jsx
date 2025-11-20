@@ -5,12 +5,8 @@ import Lista from './Lista';
 import Caja from './Caja';
 import EditProducto from './EditProducto';
 import './home.css';
-import Lector from './Lector';
 
-const Home = () => {
-  const productosEnLocal = localStorage.getItem('kiosco')
-  const [ db, setSb ] = useState(productosEnLocal ? JSON.parse(productosEnLocal) : [])
-  const [ productos, setProductos ] = useState(db);
+const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductosEnCarrito }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
   const [ isLista, setIsLista ] = useState(false);
@@ -21,11 +17,6 @@ const Home = () => {
   const [ numero, setNumero ] = useState(0);
   const [ idCodigo, setIdCodigo ] = useState(null);
   const [ valorCodigo , setValorCodigo ] = useState(null)
-
-  useEffect(() => {
-    const nuevosProductos = productos
-    localStorage.setItem('kiosco', JSON.stringify(nuevosProductos))
-  },[productos])
 
   return (
     <div className="contenedor">
@@ -105,6 +96,7 @@ const Home = () => {
               productos={productos}
               numero={numero}
               setNumero={setNumero}
+              idDoc={idDoc}
               /> 
           }
           {
@@ -132,7 +124,9 @@ const Home = () => {
                 setIsOnCamara={setIsOnCamara}
                 isOnCamara={isOnCamara}
                 valorCodigo={valorCodigo}
-                setValorCodigo={setValorCodigo}  
+                setValorCodigo={setValorCodigo}
+                productosEnCarrito={productosEnCarrito}
+                setProductosEnCarrito={setProductosEnCarrito}
               />
           }
         </section>

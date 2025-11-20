@@ -3,6 +3,8 @@ import Lector from './Lector';
 import EditItemCaja from './EditItemCaja';
 import './caja.css';
 import './editItemCaja.css';
+import { redirect } from 'react-router-dom';
+import e from 'cors';
 
 const Caja = ({
                 productos,
@@ -11,7 +13,9 @@ const Caja = ({
                 setIsOnCamara,
                 isOnCamara,
                 valorCodigo,
-                setValorCodigo
+                setValorCodigo,
+                productosEnCarrito, 
+                setProductosEnCarrito
 }) => {
 const [ search, setSearch ] = useState([]);
 const [ buscar, setBuscar ] = useState([]);
@@ -20,6 +24,8 @@ const [ subtotal, setSubTotal ] = useState(0);
 const [ cantidad, setCantidad ] = useState(0);
 const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
+const [ vuelto, setVuelto ] = useState(null);
+
 
 useEffect(() => {
    setNumero('')
@@ -42,6 +48,15 @@ useEffect(() => {
     setCarrito((prev) => [...prev, {...search[0], cantidad: 1}])    
   }
 },[search])
+
+useEffect(() => {
+  const addCarrito = carrito;
+  setProductosEnCarrito(carrito)
+},[carrito])
+
+useEffect(() => {
+  console.log(productosEnCarrito)
+},[productosEnCarrito])
 
 useEffect(() => {
     const nuevoSubtotal = carrito.reduce((acumulador, itemActual) => {
@@ -240,7 +255,10 @@ const borrarDelCarrito = (id) => {
         }
       </div>
       <div className='importe'>
-        <p>SubTotal
+        <p>Cantidad:
+          <span>{cantidad}</span>
+        </p>
+        <p>Total
           <span>
           {
             Number(subtotal).toLocaleString('es-AR', {
@@ -252,9 +270,23 @@ const borrarDelCarrito = (id) => {
           }
         </span>
         </p>
-        <p>Cantidad:
-          <span>{cantidad}</span>
+        <span>Cambio:
+          <input 
+            type='text'  
+            style={{ 
+              padding: '5px', 
+              textAlign:'right', 
+              color: 'red', 
+              fontWeight:'bold',
+              marginRight:'5px'
+            }}
+            onChange={(e) => setVuelto(e.target.value)}
+          />
+        </span>
+        <p>Vuelto: $
+          {subtotal - Number(vuelto)}
         </p>
+        
       </div>
       </div>
     </div>
