@@ -3,8 +3,8 @@ import Lector from './Lector';
 import EditItemCaja from './EditItemCaja';
 import './caja.css';
 import './editItemCaja.css';
-import { redirect } from 'react-router-dom';
-import e from 'cors';
+//import { redirect } from 'react-router-dom';
+//import e from 'cors';
 
 const Caja = ({
                 productos,
