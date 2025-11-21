@@ -3,8 +3,6 @@ import Lector from './Lector';
 import EditItemCaja from './EditItemCaja';
 import './caja.css';
 import './editItemCaja.css';
-//import { redirect } from 'react-router-dom';
-//import e from 'cors';
 
 const Caja = ({
                 productos,
@@ -24,7 +22,8 @@ const [ subtotal, setSubTotal ] = useState(0);
 const [ cantidad, setCantidad ] = useState(0);
 const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
-const [ vuelto, setVuelto ] = useState(null);
+const [ vuelto, setVuelto ] = useState('');
+const [ vueltoPuro, setVueltoPuro ] = useState(0)
 
 
 useEffect(() => {
@@ -110,6 +109,28 @@ const borrarDelCarrito = (id) => {
   if(filtrar){
     setCarrito(filtrar)
   }
+}
+
+const formatearCambio = (e) => {
+  const cambio = Number(e.target.value)
+  setVueltoPuro(cambio)
+  const valor = e.target.value
+  const rawValue = valor.replace(/\D/g, '');
+  const valorFinal = Number(rawValue).toLocaleString('es-AR', {
+                  style: 'decimal',
+                  currency: 'ARS',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                  }) 
+  setVuelto(valorFinal)
+}
+
+const calcularVuelto = () => {
+  console.log(typeof vueltoPuro)
+  if(vueltoPuro === 0){
+    return
+  }
+  return vueltoPuro - subtotal
 }
 
   return (
@@ -280,11 +301,12 @@ const borrarDelCarrito = (id) => {
               fontWeight:'bold',
               marginRight:'5px'
             }}
-            onChange={(e) => setVuelto(e.target.value)}
+            value={vuelto}
+            onChange={formatearCambio}
           />
         </span>
         <p>Vuelto: $
-          {subtotal - Number(vuelto)}
+          {subtotal - vuelto}
         </p>
         
       </div>

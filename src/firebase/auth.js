@@ -128,7 +128,7 @@ export const getData = (userUID, callback) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 // ⬅️ Retorna el objeto de datos completo
-                console.log(data)
+                //console.log(data)
                 callback(data); 
             } else {
                 callback({}); // Retorna un objeto vacío si no existe
@@ -160,6 +160,20 @@ export const agregarProducto = async ( userUID, nuevoProducto ) => {
  }
 }
 
+export const actualizarProductos = async ( userUID, actualizacion ) => {
+  console.log(userUID)
+  if(!userUID){
+    throw new error('S necesita el UID para agregar el producto');
+  }
+  const docRef = doc(db, 'kioscos', userUID)
+  try {
+    await setDoc(docRef, {
+            productos: actualizacion
+        }, { merge: true });
+  } catch (error) {
+    console.error('No se puedo actualizar productos.', error);
+  }
+}
 
 /*
 export const guardarProducto = async (userUID,producto) => {

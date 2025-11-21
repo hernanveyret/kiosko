@@ -27,7 +27,7 @@ function App() {
 useEffect(() => {
     let unsubscribeDocument = () => {};
 
-    // 🛑 Condición de Logueo
+    // Condición de Logueo
     if (usuarioLogueado && usuarioLogueado.uid) {
         const uid = usuarioLogueado.uid;
         setIdDoc(uid) // Guardo el id unico del usuario ya que va a ser el nombre del documento en firebase.
@@ -41,7 +41,7 @@ useEffect(() => {
     } else {
         // Limpiar estado al desloguearse
         setDb({});
-        console.log('No hay usuario logueado. Estado limpiado.');
+        //console.log('No hay usuario logueado. Estado limpiado.');
     }
     
     // Limpieza: Detiene la escucha del documento
@@ -64,13 +64,7 @@ useEffect(() => {
     }
   })
 
-  useEffect(() => {
-    console.log(usuarioLogueado)
-  },[usuarioLogueado])
-  
-  useEffect(() => {
-    console.log('Productos en tu kiosco: ',productos)
-  },[productos])
+ 
   
   return (
     <>

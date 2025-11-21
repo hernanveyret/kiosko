@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Card from './Card';
+import { actualizarProductos } from '../firebase/auth.js'
 import Lector from './Lector';
 import Item from './Item';
 import './lista.css';
@@ -14,7 +14,8 @@ const Lista = ({
                 setIsLista,
                 setIdCodigo,
                 valorCodigo,
-                setValorCodigo
+                setValorCodigo,
+                idDoc
               }) => {
 const [ codigo, setCodigo ] = useState(null);
 const [ search, setSearch ] = useState([])
@@ -26,6 +27,7 @@ useEffect(() => {
 const eliminarProducto = (e) => {
   const filtro = productos.filter(item => item.codigo !== e)  
   if(filtro){
+    actualizarProductos(idDoc, filtro)
     setProductos(filtro)
   }
 }

@@ -29,7 +29,7 @@ const {
   // En el componente Ingresar.jsx
 useEffect(() => {
     if (numero && numero !== 0) {
-        // ✅ Esta función es la que actualiza el input después del escaneo.
+        // Esta función es la que actualiza el input después del escaneo.
         setValue('codigo', numero); 
     }
 }, [numero, setValue]);
@@ -53,6 +53,7 @@ const cargarProducto = async (data) => {
       img: urlFinal
     }
    await agregarProducto(idDoc, nuevoProducto)
+   reset();
 }
 
 const handleChange = async (e) => {        

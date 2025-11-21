@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { actualizarProductos } from '../firebase/auth.js'
 
 import './ingresar.css'
 const EditProducto = ({ productos,
@@ -7,10 +8,13 @@ const EditProducto = ({ productos,
                         idCodigo,
                         setIdCodigo,
                         setIsLista,
-                        setProductos
+                        setProductos,
+                        idDoc
                       }) => { 
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
-const [ productoViejo, setProductoViejo ] = useState(null)
+const [ nuevaUrl, setNuevaUrl ] = useState(null)
+const [ productoViejo, setProductoViejo ] = useState(null);
+const [ isPublicId, setIsPublicId ] = useState(null);
 
 useEffect(() => {
   if(idCodigo){
@@ -42,66 +46,122 @@ const {
   formState: { errors }  
 } = useForm()
 
+  const convertirAWebP = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
 
-const cargarProducto = (data) => {
-  // Limpieza de campos vacíos
-  const productoEditado = { ...data };
-  Object.keys(productoEditado).forEach(key => {
-    if (productoEditado[key] === '' || productoEditado[key] === '0') {
-      productoEditado[key] = null;
-    }
-  });
+      reader.onload = (e) => {
+        img.src = e.target.result;
+      };
 
-  setProductos(prev =>
-    prev.map(item =>
-      item.codigo === idCodigo ? productoEditado : item
-    )
-  );
-  setIdCodigo(null);
-  setIsEditarProducto(false);
-  setIsLista(true);
-};
-/*
-const cargarProducto = (data) => {
-  const productoEditado = {...data}
-  Object.keys(productoEditado).forEach(key => {
-    if(data[key] === '' ){
-      data[key] = null
-    }
-  })
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(
+          (blob) => {
+            resolve(blob);
+          },
+          "image/webp",
+          0.8 // calidad
+        );
+      };
 
-  const filtro = productos.filter(item => item.codigo !== idCodigo)
-  if(filtro){
-    filtro.push(productoEditado);
-    setProductos(filtro)
-  }
-  setIdCodigo(null)
-  setIsEditarProducto(false)
-  setIsLista(true)
-  
-}
-*/
-/*
-const cargarProducto = (data) => {
-  if (!archivoOriginal) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    const productoNuevo = {
-      ...data,
-      img: reader.result // Base64 de la imagen
-    };
-
-    // Guardar en estado
-    setProductos(prev => [...prev, productoNuevo]);
-
-    // Reiniciar formulario
-    reset();
+      reader.readAsDataURL(file);
+    });
   };
 
-  // ¡Muy importante! Esto inicia la lectura del archivo
-  reader.readAsDataURL(archivoOriginal);
+const subirACloudinary = async (webpBlob, originalName) => {
+    // Reemplazar la extensión por .webp
+    const baseName = originalName.split(".").slice(0, -1).join(".");
+    const webpFileName = `${baseName}.webp`;
+
+    const formData = new FormData();
+    formData.append("file", webpBlob, webpFileName);
+    formData.append("upload_preset", "carrito_upload");
+    formData.append("folder", `kioscos/${idDoc}`);
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dujru85ae/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+
+    if (data.secure_url) {
+      setIsPublicId(data.public_id)
+      return data.secure_url;
+    } else {
+      console.error("Error al subir:", data);
+      return null;
+    }
+  };
+const cargarProducto = async (data) => {
+    
+    let productoEditado = { ...data }; // 1. Inicialización de productoEditado
+    
+    // 2. DETERMINAR SI SE SELECCIONÓ UN ARCHIVO NUEVO
+    const inputImgValue = data.img;
+
+    // Se considera un archivo nuevo si:
+    // a) Es un objeto FileList (lo que produce el input[type=file] al seleccionar un archivo).
+    // b) Tiene al menos un archivo dentro (length > 0).
+    const isNewFileSelected = inputImgValue instanceof FileList && inputImgValue.length > 0;
+
+    // 3. Lógica de Subida Condicional
+    if (isNewFileSelected) {
+        const archivoSeleccionado = inputImgValue[0];
+        try {
+            // Esto solo se ejecuta si sabemos que 'archivoSeleccionado' es un objeto File
+            const webpBlob = await convertirAWebP(archivoSeleccionado); 
+            const urlWebP = await subirACloudinary(webpBlob, archivoSeleccionado.name);
+            
+            // Reemplaza el objeto FileList por la URL final.
+            productoEditado.img = urlWebP; 
+            
+        } catch (error) {
+            console.error("Fallo la subida de imagen:", error);
+            // Si la subida falla, aborta todo el proceso
+            return; 
+        }
+    } 
+    
+    // 4. Si NO se seleccionó un archivo nuevo (else):
+    // 'productoEditado.img' ya contiene la URL anterior (string) gracias al 'reset(filtro)', 
+    // por lo que simplemente se mantiene ese valor y NO se llama a la lógica de subida.
+    
+    // 5. Limpieza de campos (Lógica de null/''/'0')
+    Object.keys(productoEditado).forEach(key => {
+        if (productoEditado[key] === '' || productoEditado[key] === '0') {
+            productoEditado[key] = null;
+        }
+    });
+
+    // 6. Clonar y Actualizar el array local
+    const nuevosProductos = productos.map(item =>
+        item.codigo === idCodigo ? productoEditado : item
+    );
+
+    // 7. LLAMAR A FIREBASE
+    try {
+        await actualizarProductos(idDoc, nuevosProductos); 
+        console.log("Firestore actualizado con éxito.");
+    } catch (error) {
+        console.error("Fallo la actualización de Firestore:", error);
+    }
+
+    // 8. Actualización del estado local y limpieza de UI
+    setProductos(nuevosProductos); 
+    setIdCodigo(null);
+    setIsEditarProducto(false);
+    setIsLista(true);
 };
-*/
 return (
     <div className='contenedor-ingresar'>
       <div className='titulo-ingresar'>
@@ -207,7 +267,12 @@ return (
           <input
           type="file"
           accept="image/*"
-          onChange={(e) => setArchivoOriginal(e.target.files[0])}
+          {...register('img', {
+            required: {
+              value: false,
+              message: 'Campo no obligatorio'
+            }
+          })}
         />
         </label>
         <button

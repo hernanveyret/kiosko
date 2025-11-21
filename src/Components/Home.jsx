@@ -85,6 +85,7 @@ const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductos
                 setIdCodigo={setIdCodigo}
                 setProductos={setProductos}
                 setIsLista={setIsLista}
+                idDoc={idDoc}
               />
           }
           {
@@ -113,6 +114,7 @@ const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductos
               setIdCodigo={setIdCodigo}
               valorCodigo={valorCodigo}
               setValorCodigo={setValorCodigo}
+              idDoc={idDoc}
               />
           }
           {
