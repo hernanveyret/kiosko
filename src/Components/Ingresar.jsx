@@ -17,7 +17,7 @@ const Ingresar = ({
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
 const [ url, setUrl ] = useState('');
 const [ isPublicId, setIsPublicId ] = useState(null);
-const [ isLoader, setIsLoader ] = useState(true);
+const [ isLoader, setIsLoader ] = useState(false);
 
 const {
   register,
