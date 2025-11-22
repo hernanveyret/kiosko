@@ -1,4 +1,4 @@
-.loader {
+.loaderg {
   width: 20px;
   aspect-ratio: 1;
   display: grid;
@@ -8,8 +8,8 @@
   animation: l15 1s infinite linear;
   
 }
-.loader::before,
-.loader::after {    
+.loaderg::before,
+.loaderg::after {    
   content: "";
   grid-area: 1/1;
   margin: 2px;
@@ -17,7 +17,7 @@
   border-radius: 50%;
   animation: l15 2s infinite;
 }
-.loader::after {  
+.loaderg::after {  
   animation-duration: 3s;
 }
 @keyframes l15{ 

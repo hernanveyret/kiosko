@@ -177,8 +177,7 @@ const crearCuenta = async (data) => {
                 type='submit'
                 className='btn-entrar'          
               >
-                { 
-                  isLoader ? <Loader /> : accion ? 'CREAR' : 'ENTRAR' }
+                { isLoader ? <Loader /> : accion ? 'CREAR' : 'ENTRAR' }
               </button>
               {
                 !accion &&

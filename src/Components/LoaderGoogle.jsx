@@ -3,7 +3,7 @@ import './loaderGoogle.css';
 
 const LoaderGoogle = () => {
   return (
-    <div className="loader"></div>
+    <div className="loaderg"></div>
   )
 }
 export default LoaderGoogle;

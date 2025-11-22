@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { actualizarProductos } from '../firebase/auth.js'
 
 import './ingresar.css'
+import Loader from './Loader.jsx';
 const EditProducto = ({ productos,
                         setIsEditarProducto,
                         idCodigo,
@@ -15,6 +16,7 @@ const [ archivoOriginal, setArchivoOriginal] = useState(null);
 const [ nuevaUrl, setNuevaUrl ] = useState(null)
 const [ productoViejo, setProductoViejo ] = useState(null);
 const [ isPublicId, setIsPublicId ] = useState(null);
+const [ isLoader, setIsLoader ] = useState(false);
 
 useEffect(() => {
   if(idCodigo){
@@ -103,7 +105,7 @@ const subirACloudinary = async (webpBlob, originalName) => {
     }
   };
 const cargarProducto = async (data) => {
-    
+    setIsLoader(true)
     let productoEditado = { ...data }; // 1. Inicialización de productoEditado
     
     // 2. DETERMINAR SI SE SELECCIONÓ UN ARCHIVO NUEVO
@@ -157,6 +159,7 @@ const cargarProducto = async (data) => {
     }
 
     // 8. Actualización del estado local y limpieza de UI
+    setIsLoader(false)
     setProductos(nuevosProductos); 
     setIdCodigo(null);
     setIsEditarProducto(false);
@@ -279,7 +282,7 @@ return (
           type='submit'
           className='btn-cargar'
         >
-          CARGAR
+          { isLoader ? <Loader/> : 'EDITAR'}
         </button>
       </form>
     </div>
