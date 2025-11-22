@@ -30,6 +30,9 @@ nav{
   gap: 10px;
   padding: 5px;
   box-shadow: 0 0 4px black;
+  position: sticky;
+  background-color: #f5f5f5;
+  top: 0;
 }
 .btn-nav {
   width: 35px;

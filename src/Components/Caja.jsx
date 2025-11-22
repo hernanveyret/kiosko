@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Lector from './Lector';
 import EditItemCaja from './EditItemCaja';
+import Loader from './Loader';
 import './caja.css';
 import './editItemCaja.css';
 
@@ -18,13 +19,13 @@ const Caja = ({
 const [ search, setSearch ] = useState([]);
 const [ buscar, setBuscar ] = useState([]);
 const [ carrito, setCarrito ] = useState([]);
-const [ subtotal, setSubTotal ] = useState(0);
 const [ cantidad, setCantidad ] = useState(0);
 const [ isEditItem, setIsEditItem ] = useState(false);
 const [ idCodigoEditar, setIdCodigoEditar ] = useState(null);
+const [ subtotal, setSubTotal ] = useState(0);
 const [ vuelto, setVuelto ] = useState('');
-const [ vueltoPuro, setVueltoPuro ] = useState(0)
-
+const [ vueltoPuro, setVueltoPuro ] = useState(0);
+const [ isLoader, setIsLoader ] = useState(false);
 
 useEffect(() => {
    setNumero('')
@@ -112,26 +113,44 @@ const borrarDelCarrito = (id) => {
 }
 
 const formatearCambio = (e) => {
-  const cambio = Number(e.target.value)
-  setVueltoPuro(cambio)
-  const valor = e.target.value
-  const rawValue = valor.replace(/\D/g, '');
-  const valorFinal = Number(rawValue).toLocaleString('es-AR', {
-                  style: 'decimal',
-                  currency: 'ARS',
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0
-                  }) 
-  setVuelto(valorFinal)
-}
+    const valor = e.target.value;
+    
+    // 1. Limpieza: Obtenemos SOLO los dígitos (ej: "10000"). Esto elimina el '.' si viene del input.
+    const rawValue = valor.replace(/\D/g, ''); 
+    
+    // 2. Monto Numérico: Convertimos el valor limpio a número (si es "" se convierte a 0).
+    const cambioNumerico = Number(rawValue); 
 
+    // 3. Formato para Display: Usamos 'decimal' para obtener solo los puntos de miles (ej: "10.000").
+    const valorDisplay = cambioNumerico.toLocaleString('es-AR', {
+        style: 'decimal', // Solo decimal, no currency
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+    
+    // 4. Actualizar ESTADOS:
+    setVueltoPuro(cambioNumerico); // <<-- El número PURO para el cálculo (5000)
+    setVuelto(valorDisplay);       // <<-- El string formateado para el input ("5.000")
+};
+
+// --- FUNCIÓN DE CÁLCULO DEL VUELTO ---
 const calcularVuelto = () => {
-  console.log(typeof vueltoPuro)
-  if(vueltoPuro === 0){
-    return
-  }
-  return vueltoPuro - subtotal
-}
+    // 1. **Lógica de la Resta:** El cambio (vueltoPuro) debe restar al Total (subtotal).
+    const vueltoReal = vueltoPuro - subtotal;
+    
+    // 2. Condición de Visibilidad/Validación: Solo mostrar si el cambio es positivo y suficiente.
+    if (vueltoReal <= 0 || vueltoPuro === 0) {
+        // Si el vuelto es cero, negativo o no se ingresó monto, retorna un string vacío.
+        return ''; 
+    }
+
+    // 3. Formateo de Salida: Retornamos el valor formateado (solo miles).
+    return vueltoReal.toLocaleString('es-AR', {
+        style: 'decimal', // Usamos decimal para solo los miles
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+};
 
   return (
     <div className='contenedor-caja'>
@@ -306,11 +325,25 @@ const calcularVuelto = () => {
           />
         </span>
         <p>Vuelto: $
-          {subtotal - vuelto}
+          {calcularVuelto()} 
         </p>
-        
+        <p>Medio de pago</p>
+        <select>
+          <option>Efectivo</option>
+          <option>Mercado Pago</option>
+          <option>Devito</option>
+        </select>
       </div>
       </div>
+      
+      <button
+        type='button'
+        className='cobrar-btn'
+      >
+        {
+          isLoader ? <Loader /> : 'COBRAR'
+        }
+      </button>
     </div>
   )
 };

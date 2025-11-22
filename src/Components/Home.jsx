@@ -10,7 +10,7 @@ import './home.css';
 const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductosEnCarrito }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
-  const [ isLista, setIsLista ] = useState(false);
+  const [ isLista, setIsLista ] = useState(true);
   const [ isCaja, setIsCaja ] = useState(false)
   const [ isOnCamara, setIsOnCamara ] = useState(false);
   const [ isEditarProducto, setIsEditarProducto ] = useState(false);
@@ -99,6 +99,8 @@ const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductos
               numero={numero}
               setNumero={setNumero}
               idDoc={idDoc}
+              setIsLista={setIsLista}
+              setIsIngresar={setIsIngresar}
               /> 
           }
           {

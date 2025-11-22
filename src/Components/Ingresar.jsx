@@ -11,7 +11,9 @@ const Ingresar = ({
                   productos,
                   numero,
                   setNumero,
-                  idDoc
+                  idDoc,
+                  setIsLista,
+                  setIsIngresar
                 }) => {  
 
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
@@ -58,6 +60,8 @@ const cargarProducto = async (data) => {
    await agregarProducto(idDoc, nuevoProducto)
    setIsLoader(false)
    reset();
+   setIsIngresar(false);
+   setIsLista(true);
 }
 
 const handleChange = async (e) => {        
