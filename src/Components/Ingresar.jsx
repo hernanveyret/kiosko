@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { agregarProducto } from '../firebase/auth.js';
 import Lector from './Lector';
+import Loader from './Loader.jsx';
 import './ingresar.css'
 const Ingresar = ({ 
                   isOnCamara, 
@@ -16,6 +17,7 @@ const Ingresar = ({
 const [ archivoOriginal, setArchivoOriginal] = useState(null);
 const [ url, setUrl ] = useState('');
 const [ isPublicId, setIsPublicId ] = useState(null);
+const [ isLoader, setIsLoader ] = useState(true);
 
 const {
   register,
@@ -35,6 +37,7 @@ useEffect(() => {
 }, [numero, setValue]);
 
 const cargarProducto = async (data) => {
+  setIsLoader(true)
    if (!archivoOriginal) {
     alert('Debe seleccionar una imagen')
     return;
@@ -53,6 +56,7 @@ const cargarProducto = async (data) => {
       img: urlFinal
     }
    await agregarProducto(idDoc, nuevoProducto)
+   setIsLoader(false)
    reset();
 }
 
@@ -264,7 +268,8 @@ return (
           type='submit'
           className='btn-cargar'
         >
-          CARGAR
+          { isLoader ? <Loader /> : 'CARGAR' }
+          
         </button>
       </form>
     </div>

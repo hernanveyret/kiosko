@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { loginConMail, crearCuentaEmail, loginWhihtGoogle } from '../firebase/auth.js'
+import Loader from './Loader.jsx';
+import LoaderGoogle from './LoaderGoogle.jsx';
 import { auth } from '../firebase/config.js';
 import { onAuthStateChanged } from 'firebase/auth';
 import './login.css';
@@ -21,11 +23,17 @@ const Login = ({
   const [ accion, setAccion ] = useState(false);
   const [ abrirCerrarOjos, setAbrirCerrarOjos ] = useState(false) 
   const [ errorMail, setErrorMail ] = useState('');
+  const [ isLoader, setIsLoader ] = useState(false);
+  const [ isLoaderGoogle, setIsLoaderGoogle ] = useState(false)
   
   const refAsideIzq = useRef(null);
   const refAsideDer = useRef(null);
   
-
+const googleLogin = async () => {
+  setIsLoaderGoogle(true);
+  await loginWhihtGoogle();
+  setIsLoaderGoogle(false) 
+}
 const crearCuenta = async (data) => {
   console.log('crear una cuenta');
   console.log(data);
@@ -55,16 +63,16 @@ const crearCuenta = async (data) => {
   }
 };
 
-
-
-  const ingresar = (data) => {
+  const ingresar = async (data) => {
     //console.log(data)
+    setIsLoader(true)
     const dataUser = {
       nombre: data.nombre,
       correo: data.mail,
       password: data.password
     } 
-    loginConMail(dataUser)
+    await loginConMail(dataUser)
+    setIsLoader(false)
   }
 
   return (
@@ -169,7 +177,8 @@ const crearCuenta = async (data) => {
                 type='submit'
                 className='btn-entrar'          
               >
-                { accion ? 'CREAR' : 'ENTRAR' }
+                { 
+                  isLoader ? <Loader /> : accion ? 'CREAR' : 'ENTRAR' }
               </button>
               {
                 !accion &&
@@ -177,15 +186,20 @@ const crearCuenta = async (data) => {
                     type='button'
                     title='Entrar con google'
                     className='btn-google'
-                    onClick={loginWhihtGoogle}
-                  >
+                    onClick={googleLogin}
+                  > 
+                  {
+                    isLoaderGoogle ? <LoaderGoogle /> :
+                    <>
                     <img 
-                      width="20" 
-                      height="20" 
-                      src="https://img.icons8.com/color/48/google-logo.png" 
-                      alt="google-logo"
+                    width="20" 
+                    height="20" 
+                    src="https://img.icons8.com/color/48/google-logo.png" 
+                    alt="google-logo"
                     />
                     Entrar con Google
+                    </>
+                  }
                   </button>
               }
              
