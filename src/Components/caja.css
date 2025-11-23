@@ -114,8 +114,7 @@
 .items-cobrar {
     display: grid;
     gap: 0 10px;
-    /* Grid de 4 columnas: Descripción, Cantidad, Precio, Botones */
-    grid-template-columns: 1fr auto auto 60px; 
+    grid-template-columns: 200px auto auto auto 30px; 
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #eee;
@@ -133,9 +132,11 @@
 .items-cobrar .btn-cobrar {
     display: flex;
     gap: 5px;
+    justify-content: flex-end;    
 }
 
-.items-cobrar .btn-cobrar button {
+.items-cobrar .btn-cobrar .btn-items-caja {
+    display: none;
     background-color: var(--color-fondo-oscuro);
     border: none;
     padding: 5px;
@@ -239,6 +240,11 @@ p[style*="textAlign:center"] {
     color: #999 !important;
     font-style: italic;
 }
+.btn-cobrar-menu {
+  background-color: #212529;
+  border: none;
+  border-radius: 5px;
+}
 
 @media (min-width: 800px) {
   .importe {
@@ -246,8 +252,7 @@ p[style*="textAlign:center"] {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
   .contenedor-caja {
-    display: flex;
-    
+    display: flex;    
   }
   
   .contenedor-pc {
@@ -261,5 +266,20 @@ p[style*="textAlign:center"] {
   .importe {
     margin: 0 10px 0 0;
   }
+  .items-cobrar .btn-cobrar .btn-items-caja {
+    display: flex;
+  }
+  .btn-cobrar-menu {
+    display: none;
+  }
+  .items-cobrar {
+    display: grid;
+    gap: 0 10px;
+    grid-template-columns: 1fr auto auto auto 60px; 
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
 }
   
