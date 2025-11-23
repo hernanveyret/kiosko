@@ -26,7 +26,6 @@
     margin-bottom: var(--padding-base);    
 }
 
-/* --- SECCIÓN 1: BUSCADOR Y ESCÁNER --- */
 .nav-buscador {
     display: flex;
     gap: 10px;

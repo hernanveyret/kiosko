@@ -251,7 +251,11 @@ useEffect(() => {
               </p>
             </div>
             <div>
-              <p>SUTOTAL</p>
+              <p>
+                {
+                  item.cantidad * item.precio
+                }
+              </p>
             </div>
             <div className="btn-cobrar">
               <button
@@ -333,8 +337,10 @@ useEffect(() => {
             onChange={formatearCambio}
           />
         </span>
-        <p>Vuelto: $
-          {calcularVuelto()} 
+        <p>Vuelto:
+          <span>$
+          { calcularVuelto() } 
+          </span>
         </p>
         <span className='mdPago'>
           <p>Medio de pago</p>
