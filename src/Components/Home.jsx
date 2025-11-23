@@ -7,7 +7,14 @@ import EditProducto from './EditProducto';
 import './home.css';
 
 
-const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductosEnCarrito }) => {  
+const Home = ({ idDoc, 
+                productos, 
+                setProductos, 
+                productosEnCarrito, 
+                setProductosEnCarrito,
+                carrito,
+                setCarrito
+              }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
   const [ isLista, setIsLista ] = useState(true);
@@ -129,9 +136,9 @@ const Home = ({ idDoc, productos, setProductos, productosEnCarrito, setProductos
                 setIsOnCamara={setIsOnCamara}
                 isOnCamara={isOnCamara}
                 valorCodigo={valorCodigo}
-                setValorCodigo={setValorCodigo}
-                productosEnCarrito={productosEnCarrito}
-                setProductosEnCarrito={setProductosEnCarrito}
+                setValorCodigo={setValorCodigo}                
+                carrito={carrito}
+                setCarrito={setCarrito}
               />
           }
         </section>

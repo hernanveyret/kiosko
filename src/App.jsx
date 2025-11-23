@@ -7,22 +7,23 @@ import Login from './Components/Login'
 import './App.css'
 
 function App() {
+ 
   const [ isHome, setIsHome ] = useState(false);
   const [ isLogin, setIsLogin ] = useState(true)
   const [ usuarioLogueado, setUsuarioLogueado ] = useState(null); // Muestra datos del usuario logedo
   const [ errorUsuario, setErrorUsuario ] = useState(false);
   
   const productosParaCobrar = localStorage.getItem('cobrar-kiosco')
-  const [ productosEnCarrito, setProductosEnCarrito ] = useState(productosParaCobrar ? JSON.parse(productosParaCobrar) : [])
+  const [ carrito, setCarrito ] = useState(productosParaCobrar ? JSON.parse(productosParaCobrar) : [])
   const [ productos, setProductos ] = useState([]);
   const [ db, setDb ] = useState([])
   const [ cargando, setCargando ] = useState(true);
   const [ idDoc, setIdDoc ] = useState(null)
 
-    useEffect(() => {
-    const nuevosProductos = productosEnCarrito
-    localStorage.setItem('kiosco', JSON.stringify(nuevosProductos))
-  },[productosEnCarrito])
+  useEffect(() => {
+    const nuevosProductos = carrito
+    localStorage.setItem('cobrar-kiosco', JSON.stringify(nuevosProductos))
+  },[carrito])
 
 useEffect(() => {
     let unsubscribeDocument = () => {};
@@ -82,9 +83,9 @@ useEffect(() => {
           <Home 
           idDoc={idDoc}
           productos={productos}
-          setProductos={setProductos}
-          productosEnCarrito={productosEnCarrito}
-          setProductosEnCarrito={setProductosEnCarrito}
+          setProductos={setProductos}          
+          carrito={carrito}
+          setCarrito={setCarrito}
           />
       }
     </>
