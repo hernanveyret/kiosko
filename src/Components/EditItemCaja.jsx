@@ -15,9 +15,6 @@ const EditItemCaja = ({
     formState: { errors }  
   } = useForm()
 
-  useEffect(() => {
-    console.log('Carrito: ', carrito)
-  },[carrito])
 
   useEffect(() => {
     console.log('Id codigo a editar: ', idCodigoEditar)    

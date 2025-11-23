@@ -153,7 +153,7 @@ const cargarProducto = async (data) => {
     // 7. LLAMAR A FIREBASE
     try {
         await actualizarProductos(idDoc, nuevosProductos); 
-        console.log("Firestore actualizado con éxito.");
+        //console.log("Firestore actualizado con éxito.");
     } catch (error) {
         console.error("Fallo la actualización de Firestore:", error);
     }

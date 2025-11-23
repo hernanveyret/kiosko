@@ -116,6 +116,8 @@ h3  {
 }
 .importe {
   background-color: black;
+  padding: 10px;
+  gap: 5px;
   width: 95%;
   min-height: 100px;
   margin: 10px auto;
@@ -136,6 +138,15 @@ h3  {
 
 .close {
   display: none;
+}
+.mdPago {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mediopago {
+  padding: 10px;
+  margin-right: 5px;
 }
 
 @media (min-width: 800px) {

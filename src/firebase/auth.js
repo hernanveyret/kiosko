@@ -161,7 +161,7 @@ export const agregarProducto = async ( userUID, nuevoProducto ) => {
 }
 
 export const actualizarProductos = async ( userUID, actualizacion ) => {
-  console.log(userUID)
+  //console.log(userUID)
   if(!userUID){
     throw new error('S necesita el UID para agregar el producto');
   }

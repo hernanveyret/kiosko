@@ -26,6 +26,7 @@ const [ subtotal, setSubTotal ] = useState(0);
 const [ vuelto, setVuelto ] = useState('');
 const [ vueltoPuro, setVueltoPuro ] = useState(0);
 const [ isLoader, setIsLoader ] = useState(false);
+const [ mdPago, SetMdPago] = useState('');
 
 useEffect(() => {
    setNumero('')
@@ -50,20 +51,16 @@ useEffect(() => {
 },[search])
 
 useEffect(() => {
-  const addCarrito = carrito;
-  setProductosEnCarrito(carrito)
+  console.log('Productos en mi carrito: ',carrito)
 },[carrito])
 
-useEffect(() => {
-  console.log(productosEnCarrito)
-},[productosEnCarrito])
 
 useEffect(() => {
+  console.log('Llama a carrito')
     const nuevoSubtotal = carrito.reduce((acumulador, itemActual) => {
-        return acumulador + Number(itemActual.precio) * Number(itemActual.cantidad);
+        return acumulador + ( Number(itemActual.cantidad) === Number(itemActual.cantidadOferta) ? Number(itemActual.precioOff) : Number(itemActual.cantidad) * Number(itemActual.precio))
     }, 0);
-    setSubTotal(nuevoSubtotal);    
-
+    setSubTotal(nuevoSubtotal);
     const cantidadProductos = carrito.reduce((acc, cant) => Number(acc) + Number(cant.cantidad), 0)
     setCantidad(cantidadProductos)
 }, [carrito]);
@@ -96,10 +93,10 @@ const buscarProductoTeclado = (item) => {
 
 const addCarrito = (i) => {
 const valor = navRef.current
-  if(buscar){
-    
+  if(buscar){    
     setValorCodigo('');
-    setCarrito((prev) => [...prev, { ...buscar[i], cantidad: 1 }]);
+    console.log(buscar[i])
+    setCarrito((prev) => [...prev, { ...buscar[i], cantidad: 1}]);    
     setBuscar([]);
     valor.classList.add('close')
   }
@@ -115,42 +112,34 @@ const borrarDelCarrito = (id) => {
 const formatearCambio = (e) => {
     const valor = e.target.value;
     
-    // 1. Limpieza: Obtenemos SOLO los dígitos (ej: "10000"). Esto elimina el '.' si viene del input.
     const rawValue = valor.replace(/\D/g, ''); 
     
-    // 2. Monto Numérico: Convertimos el valor limpio a número (si es "" se convierte a 0).
-    const cambioNumerico = Number(rawValue); 
-
-    // 3. Formato para Display: Usamos 'decimal' para obtener solo los puntos de miles (ej: "10.000").
+    const cambioNumerico = Number(rawValue);
     const valorDisplay = cambioNumerico.toLocaleString('es-AR', {
-        style: 'decimal', // Solo decimal, no currency
+        style: 'decimal', 
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     });
     
-    // 4. Actualizar ESTADOS:
-    setVueltoPuro(cambioNumerico); // <<-- El número PURO para el cálculo (5000)
-    setVuelto(valorDisplay);       // <<-- El string formateado para el input ("5.000")
+    setVueltoPuro(cambioNumerico);
+    setVuelto(valorDisplay);      
 };
 
-// --- FUNCIÓN DE CÁLCULO DEL VUELTO ---
-const calcularVuelto = () => {
-    // 1. **Lógica de la Resta:** El cambio (vueltoPuro) debe restar al Total (subtotal).
-    const vueltoReal = vueltoPuro - subtotal;
-    
-    // 2. Condición de Visibilidad/Validación: Solo mostrar si el cambio es positivo y suficiente.
-    if (vueltoReal <= 0 || vueltoPuro === 0) {
-        // Si el vuelto es cero, negativo o no se ingresó monto, retorna un string vacío.
+const calcularVuelto = () => {    
+    const vueltoReal = vueltoPuro - subtotal;       
+    if (vueltoReal <= 0 || vueltoPuro === 0) {       
         return ''; 
-    }
-
-    // 3. Formateo de Salida: Retornamos el valor formateado (solo miles).
+    }    
     return vueltoReal.toLocaleString('es-AR', {
-        style: 'decimal', // Usamos decimal para solo los miles
+        style: 'decimal', 
         minimumFractionDigits: 0,
         maximumFractionDigits: 0
     });
 };
+
+useEffect(() => {
+  console.log('Medio de pago: ' , mdPago)
+},[mdPago])
 
   return (
     <div className='contenedor-caja'>
@@ -241,15 +230,15 @@ const calcularVuelto = () => {
             </div>
             <div>
               <p>
-                { Number(item.cantidad) === 1 ?
-                  Number(item.precio).toLocaleString('es-AR', {
+                { Number(item.cantidad) === Number(item.cantidadOferta) ?
+                  Number(item.precioOff).toLocaleString('es-AR', {
                   style: 'currency',
                   currency: 'ARS',
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 0
                   }) 
                   :
-                  Number(item.precioOff).toLocaleString('es-AR', {
+                  Number(item.precio).toLocaleString('es-AR', {
                   style: 'currency',
                   currency: 'ARS',
                   minimumFractionDigits: 0,
@@ -298,7 +287,7 @@ const calcularVuelto = () => {
         <p>Cantidad:
           <span>{cantidad}</span>
         </p>
-        <p>Total
+        <p style={{color: 'yellow', fontSize:'30px'}}>Total
           <span>
           {
             Number(subtotal).toLocaleString('es-AR', {
@@ -327,12 +316,19 @@ const calcularVuelto = () => {
         <p>Vuelto: $
           {calcularVuelto()} 
         </p>
-        <p>Medio de pago</p>
-        <select>
-          <option>Efectivo</option>
-          <option>Mercado Pago</option>
-          <option>Devito</option>
+        <span className='mdPago'>
+          <p>Medio de pago</p>
+          <select
+          className='mediopago'
+          onChange={(e) => SetMdPago(e.target.value)}
+        >
+          <option defaultValue=''>...</option>
+          <option value='Efectivo'>Efectivo</option>
+          <option value='Mercado Pago'>Mercado Pago</option>
+          <option value='Débito'>Devito</option>
         </select>
+        </span>
+        
       </div>
       </div>
       
