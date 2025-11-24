@@ -32,10 +32,8 @@ const [ isLoader, setIsLoader ] = useState(false);
 const [ mdPago, SetMdPago] = useState('');
 
 
-// Función para alternar el menú usando el estado idCodigoEditar
+
 const toggleMenu = (codigoItem) => {
-    // Si el menú clicado ya está abierto, lo cierras (pones null).
-    // Si es diferente o cerrado, lo abres (pones su CODIGO).
     setIdCodigoEditar(idCodigoEditar === codigoItem ? null : codigoItem);
 };
 
@@ -119,10 +117,8 @@ const borrarDelCarrito = (id) => {
 }
 
 const formatearCambio = (e) => {
-    const valor = e.target.value;
-    
-    const rawValue = valor.replace(/\D/g, ''); 
-    
+    const valor = e.target.value;    
+    const rawValue = valor.replace(/\D/g, '');    
     const cambioNumerico = Number(rawValue);
     const valorDisplay = cambioNumerico.toLocaleString('es-AR', {
         style: 'decimal', 
@@ -133,6 +129,16 @@ const formatearCambio = (e) => {
     setVueltoPuro(cambioNumerico);
     setVuelto(valorDisplay);      
 };
+
+const formatearTotalItem = (cant, precio) => {
+  const total = cant * precio;
+  return total.toLocaleString('es-AR', {
+                  style: 'currency',
+                  currency: 'ARS',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0
+                  })
+}
 
 const calcularVuelto = () => {    
     const vueltoReal = vueltoPuro - subtotal;       
@@ -256,9 +262,7 @@ const calcularVuelto = () => {
             </div>
             <div>
               <p>
-                {
-                  item.cantidad * item.precio
-                }
+                { formatearTotalItem(Number(item.cantidad), Number(item.precio)) }
               </p>
             </div>
             <div className="btn-cobrar">
@@ -312,7 +316,6 @@ const calcularVuelto = () => {
                     setIsEditItem={setIsEditItem}
                     borrarDelCarrito={borrarDelCarrito}
                     itemCodigo={item.codigo}
-                    // Puedes pasar el estado actual para que el componente sepa si está visible:
                     menuActivo={idCodigoEditar === item.codigo} 
                 />
             )}
