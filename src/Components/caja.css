@@ -114,6 +114,7 @@
     padding: 10px;
     border-bottom: 1px solid #eee;
     font-size: 14px;
+      position: relative;
 }
 
 .items-cobrar:nth-child(even) {
@@ -127,7 +128,9 @@
 .items-cobrar .btn-cobrar {
     display: flex;
     gap: 5px;
-    justify-content: flex-end;    
+    justify-content: flex-end;
+   
+    
 }
 
 .items-cobrar .btn-cobrar .btn-items-caja {
@@ -138,6 +141,7 @@
     border-radius: 4px;
     cursor: pointer;
     line-height: 0;
+    
 }
 
 .items-cobrar .btn-cobrar svg {
@@ -276,5 +280,6 @@ p[style*="textAlign:center"] {
     padding: 10px;
     border-bottom: 1px solid #eee;
     font-size: 14px;
+  
 }
 }  

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Lector from './Lector';
 import EditItemCaja from './EditItemCaja';
 import Loader from './Loader';
+import ItemMenuCaja from './ItemMenuCaja';
 import './caja.css';
 import './editItemCaja.css';
 
@@ -29,6 +30,14 @@ const [ vuelto, setVuelto ] = useState('');
 const [ vueltoPuro, setVueltoPuro ] = useState(0);
 const [ isLoader, setIsLoader ] = useState(false);
 const [ mdPago, SetMdPago] = useState('');
+
+
+// Función para alternar el menú usando el estado idCodigoEditar
+const toggleMenu = (codigoItem) => {
+    // Si el menú clicado ya está abierto, lo cierras (pones null).
+    // Si es diferente o cerrado, lo abres (pones su CODIGO).
+    setIdCodigoEditar(idCodigoEditar === codigoItem ? null : codigoItem);
+};
 
 useEffect(() => {
    setNumero('')
@@ -58,7 +67,6 @@ useEffect(() => {
 
 
 useEffect(() => {
-  console.log('Llama a carrito')
     const nuevoSubtotal = carrito.reduce((acumulador, itemActual) => {
         return acumulador + ( Number(itemActual.cantidad) === Number(itemActual.cantidadOferta) ? Number(itemActual.precioOff) : Number(itemActual.cantidad) * Number(itemActual.precio))
     }, 0);
@@ -97,7 +105,6 @@ const addCarrito = (i) => {
 const valor = navRef.current
   if(buscar){    
     setValorCodigo('');
-    console.log(buscar[i])
     setCarrito((prev) => [...prev, { ...buscar[i], cantidad: 1}]);    
     setBuscar([]);
     valor.classList.add('close')
@@ -139,9 +146,6 @@ const calcularVuelto = () => {
     });
 };
 
-useEffect(() => {
-  console.log('Medio de pago: ' , mdPago)
-},[mdPago])
 
   return (
     <div className='contenedor-caja'>
@@ -262,6 +266,7 @@ useEffect(() => {
                 title='Menu'
                 type='button'
                 className='btn-cobrar-menu'
+                onClick={() => toggleMenu(item.codigo)}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" 
                   height="24px" 
@@ -271,6 +276,7 @@ useEffect(() => {
                     <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z"/>
                 </svg>
               </button>
+              
               <button
                 type='Editar'
                 className='btn-items-caja'
@@ -300,12 +306,22 @@ useEffect(() => {
                     <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
                 </button>
             </div>
-              
+              { idCodigoEditar === item.codigo &&(
+                <ItemMenuCaja 
+                    setIdCodigoEditar={setIdCodigoEditar}
+                    setIsEditItem={setIsEditItem}
+                    borrarDelCarrito={borrarDelCarrito}
+                    itemCodigo={item.codigo}
+                    // Puedes pasar el estado actual para que el componente sepa si está visible:
+                    menuActivo={idCodigoEditar === item.codigo} 
+                />
+            )}
             </div>
           ))
           :
           <p style={{textAlign:'center', color:'grey', padding:'10px'}}>Aun no hay productos para cobrar</p>
         }
+        
       </div>
       <div className='importe'>
         <p>Cantidad:

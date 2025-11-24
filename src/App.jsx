@@ -37,7 +37,6 @@ useEffect(() => {
             // ⬅️ 'fullData' es el objeto completo {nombre_kiosco: "...", productos: [], ventas: []}
             setDb(fullData);
             setProductos(fullData.productos)
-            console.log("Documento completo cargado:", fullData);
         });
     } else {
         // Limpiar estado al desloguearse
@@ -65,7 +64,6 @@ useEffect(() => {
     }
   })
 
- 
   
   return (
     <>

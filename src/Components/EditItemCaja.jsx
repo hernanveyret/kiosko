@@ -16,8 +16,7 @@ const EditItemCaja = ({
   } = useForm()
 
 
-  useEffect(() => {
-    console.log('Id codigo a editar: ', idCodigoEditar)    
+  useEffect(() => {  
       const filtro = carrito.find(item => item.codigo === idCodigoEditar);
       if(filtro){
         setValue('cantidad', filtro.cantidad)
