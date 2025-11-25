@@ -245,6 +245,7 @@ const cobrar = async () => {
         Ecanear Codigo
       </button>
         </div>
+      
       <section className="productos-buscados close" ref={navRef}>
         {
           buscar &&

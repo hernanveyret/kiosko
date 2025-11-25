@@ -1,4 +1,4 @@
-import React,{ useState, useEffect} from 'react';
+import React,{ useState, useEffect, useRef} from 'react';
 import { cerrarSesion } from '../firebase/auth.js'
 import Ingresar from './Ingresar';
 import Lista from './Lista';
@@ -28,7 +28,14 @@ const Home = ({ idDoc,
 
   const [ numero, setNumero ] = useState(0);
   const [ idCodigo, setIdCodigo ] = useState(null);
-  const [ valorCodigo , setValorCodigo ] = useState(null)
+  const [ valorCodigo , setValorCodigo ] = useState(null);
+
+  const menuRef = useRef(null)
+
+  useEffect(() => {
+    const menu = menuRef.current;
+    menu && menu.classList.toggle('close');
+  },[isOpenMenu])
 
   return (
     <div className="contenedor">
@@ -97,6 +104,14 @@ const Home = ({ idDoc,
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="red"><path d="M200-120q-33 0-56.5-23.5T120-200v-160h80v160h560v-560H200v160h-80v-160q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm220-160-56-58 102-102H120v-80h346L364-622l56-58 200 200-200 200Z"/></svg>
             </button>           
         </nav>
+        <section className='menu close' ref={menuRef}>
+        <ol>
+          <li>Ventas diarias</li>
+          <li>Productos mas vendidos</li>
+          <li>Cambio de nombre de usuario</li>
+          <li>Cambio de contraseña</li>
+        </ol>
+      </section>
         <section>
           {
             isEditarProducto &&
