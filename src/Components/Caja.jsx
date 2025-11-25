@@ -151,6 +151,13 @@ const calcularVuelto = () => {
 
 const cobrar = async () => {
   if(carrito.length === 0){
+    const refErr = errorRef.current
+    refErr.classList.remove('banner-caja')
+    refErr.classList.add('error')
+    setTimeout(() => {
+      refErr.classList.remove('error')
+      refErr.classList.add('banner-caja')
+    },2000)
     return
   }
   setIsLoader(true);
@@ -372,7 +379,7 @@ const cobrar = async () => {
           :
           <p           
           className='banner-caja'
-          
+          ref={errorRef}
           >
             Aun no hay productos para cobrar</p>
         }
