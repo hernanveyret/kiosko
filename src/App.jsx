@@ -18,7 +18,8 @@ function App() {
   const [ productos, setProductos ] = useState([]);
   const [ db, setDb ] = useState([])
   const [ cargando, setCargando ] = useState(true);
-  const [ idDoc, setIdDoc ] = useState(null)
+  const [ idDoc, setIdDoc ] = useState(null);
+  const [ isLoaderGeneral, setIsLoaderGeneral ] = useState(false);
 
   useEffect(() => {
     const nuevosProductos = carrito
@@ -27,7 +28,7 @@ function App() {
 
 useEffect(() => {
     let unsubscribeDocument = () => {};
-
+      setIsLoaderGeneral(true)
     // Condición de Logueo
     if (usuarioLogueado && usuarioLogueado.uid) {
         const uid = usuarioLogueado.uid;
@@ -37,6 +38,7 @@ useEffect(() => {
             // ⬅️ 'fullData' es el objeto completo {nombre_kiosco: "...", productos: [], ventas: []}
             setDb(fullData);
             setProductos(fullData.productos)
+            setIsLoaderGeneral(false)
         });
     } else {
         // Limpiar estado al desloguearse
@@ -87,6 +89,8 @@ db.ventas && console.log('Base de datos db:', db.ventas)
           carrito={carrito}
           setCarrito={setCarrito}
           db={db}
+          isLoaderGeneral={isLoaderGeneral}
+          setIsLoaderGeneral={setIsLoaderGeneral}
           />
       }
     </>

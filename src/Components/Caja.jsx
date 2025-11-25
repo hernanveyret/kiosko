@@ -46,6 +46,7 @@ useEffect(() => {
 },[])
 
 const navRef = useRef(null);
+const errorRef = useRef(null);
 
 const buscarProductoCam = (item) => {  
   const resultados = productos.filter(e =>
@@ -220,7 +221,7 @@ const cobrar = async () => {
             setIsEditItem={setIsEditItem}
           />
       }
-        <h3>Lista de productos</h3>
+        <h3>Items</h3>
     <div className="buscador-producto">
       <div className='nav-buscador'>
       <input type="text" 
@@ -369,7 +370,11 @@ const cobrar = async () => {
             </div>
           ))
           :
-          <p style={{textAlign:'center', color:'grey', padding:'10px'}}>Aun no hay productos para cobrar</p>
+          <p           
+          className='banner-caja'
+          
+          >
+            Aun no hay productos para cobrar</p>
         }
         
       </div>

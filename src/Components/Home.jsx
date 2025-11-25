@@ -14,7 +14,9 @@ const Home = ({ idDoc,
                 setProductosEnCarrito,
                 carrito,
                 setCarrito,
-                db
+                db,
+                isLoaderGeneral,
+                setIsLoaderGeneral
               }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
@@ -126,6 +128,8 @@ const Home = ({ idDoc,
               valorCodigo={valorCodigo}
               setValorCodigo={setValorCodigo}
               idDoc={idDoc}
+              isLoaderGeneral={isLoaderGeneral}
+              setIsLoaderGeneral={setIsLoaderGeneral}
               />
           }
           {
@@ -142,6 +146,7 @@ const Home = ({ idDoc,
                 setCarrito={setCarrito}
                 idDoc={idDoc}
                 db={db}
+                
               />
           }
         </section>

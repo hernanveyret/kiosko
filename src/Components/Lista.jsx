@@ -3,6 +3,7 @@ import { actualizarProductos } from '../firebase/auth.js'
 import Lector from './Lector';
 import Item from './Item';
 import './lista.css';
+import LoaderGeneral from './LoaderGeneral.jsx';
 const Lista = ({ 
                 productos, 
                 setProductos,
@@ -15,7 +16,9 @@ const Lista = ({
                 setIdCodigo,
                 valorCodigo,
                 setValorCodigo,
-                idDoc
+                idDoc,
+                isLoaderGeneral,
+                setIsLoaderGeneral
               }) => {
 const [ codigo, setCodigo ] = useState(null);
 const [ search, setSearch ] = useState([])
@@ -50,6 +53,7 @@ useEffect(() => {
 
 return (
   <div className='contenedor-lista'>
+    
     {
       isOnCamara && 
         <Lector 
@@ -72,6 +76,7 @@ return (
         Ecanear Codigo
       </button>
     </div>
+    
     <div style={{background:'grey', color:'white', marginBottom:'0'}} className='contenedor-item header-oculto' >
       <div style={{borderRight: '1px solid white'}} className='item-img'></div>
       <div className='item-info'>
@@ -84,6 +89,7 @@ return (
       </div>
       <div className='item-btn'>ACCION</div>
     </div>
+    { isLoaderGeneral && <LoaderGeneral /> }
     <section 
       className='lista'>
         { 

@@ -10,7 +10,17 @@
     --borde-redondeado: 8px;
     --padding-base: 15px;
 }
-
+.error{
+    color: red;
+    text-align:center;
+    
+    padding:10px;
+}
+.banner-caja {
+    text-align:center;
+    color: grey; 
+    padding:10px;
+}
 /* Estilos Generales para el Contenedor Principal */
 .contenedor-caja {
     display: flex;
