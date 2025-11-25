@@ -228,7 +228,7 @@ const cobrar = async () => {
             setIsEditItem={setIsEditItem}
           />
       }
-        <h3>Items</h3>
+        <h3>CAJA</h3>
     <div className="buscador-producto">
       <div className='nav-buscador'>
       <input type="text" 
