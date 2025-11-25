@@ -160,6 +160,36 @@ export const agregarProducto = async ( userUID, nuevoProducto ) => {
  }
 }
 
+// Opción 1: La venta es un objeto Map/JSON, no un array
+export const agregarVentas = async ( userUID, nuevaVenta, fulldate, condicion ) => {
+    // nuevaVenta es: { "24112025": { id: ..., total: ... } }
+
+    if(!userUID){
+        throw new Error('Se necesita el UID para agregar el producto');
+    }
+    
+    // Crear una referencia del documento del kiosco.
+    const userDocRef = doc(db, 'kioscos', userUID);  
+    
+    try {
+        // Al usar setDoc con { merge: true } y pasar el objeto nuevaVenta
+        if(!condicion){
+          await setDoc(userDocRef, { ventas: nuevaVenta }, { merge: true });
+          console.log('Venta diaria agregada con éxito como campo de mapa.');
+        }else{
+          const campoDinamico = `ventas.${fulldate}`
+          await updateDoc(userDocRef, {
+          [campoDinamico]: arrayUnion(nuevaVenta)
+          });
+          console.log('venta agregada con exito')
+        }
+        
+    } catch (error) {
+        console.error('Error al cargar la venta diaria: ', error);
+        throw error
+    }
+}
+
 export const actualizarProductos = async ( userUID, actualizacion ) => {
   //console.log(userUID)
   if(!userUID){

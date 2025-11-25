@@ -52,6 +52,8 @@ useEffect(() => {
 // Dependencia clave: Se re-ejecuta solo cuando el usuario cambia.
 }, [usuarioLogueado]); 
 
+db.ventas && console.log('Base de datos db:', db.ventas)
+
   // Detecta si se loguea o sale.
   onAuthStateChanged( auth, ( user ) => {
     if(user){
@@ -84,6 +86,7 @@ useEffect(() => {
           setProductos={setProductos}          
           carrito={carrito}
           setCarrito={setCarrito}
+          db={db}
           />
       }
     </>

@@ -13,7 +13,8 @@ const Home = ({ idDoc,
                 productosEnCarrito, 
                 setProductosEnCarrito,
                 carrito,
-                setCarrito
+                setCarrito,
+                db
               }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
@@ -139,6 +140,8 @@ const Home = ({ idDoc,
                 setValorCodigo={setValorCodigo}                
                 carrito={carrito}
                 setCarrito={setCarrito}
+                idDoc={idDoc}
+                db={db}
               />
           }
         </section>

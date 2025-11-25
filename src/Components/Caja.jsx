@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { agregarVentas } from '../firebase/auth.js';
 import Lector from './Lector';
 import EditItemCaja from './EditItemCaja';
 import Loader from './Loader';
@@ -17,7 +18,9 @@ const Caja = ({
                 productosEnCarrito, 
                 setProductosEnCarrito,
                 carrito,
-                setCarrito
+                setCarrito,
+                idDoc,
+                db
 }) => {
 
 const [ search, setSearch ] = useState([]);
@@ -30,8 +33,6 @@ const [ vuelto, setVuelto ] = useState('');
 const [ vueltoPuro, setVueltoPuro ] = useState(0);
 const [ isLoader, setIsLoader ] = useState(false);
 const [ mdPago, SetMdPago] = useState('');
-
-
 
 const toggleMenu = (codigoItem) => {
     setIdCodigoEditar(idCodigoEditar === codigoItem ? null : codigoItem);
@@ -58,11 +59,6 @@ useEffect(() => {
     setCarrito((prev) => [...prev, {...search[0], cantidad: 1}])    
   }
 },[search])
-
-useEffect(() => {
-  console.log('Productos en mi carrito: ',carrito)
-},[carrito])
-
 
 useEffect(() => {
     const nuevoSubtotal = carrito.reduce((acumulador, itemActual) => {
@@ -152,6 +148,57 @@ const calcularVuelto = () => {
     });
 };
 
+const cobrar = async () => {
+  if(carrito.length === 0){
+    return
+  }
+  setIsLoader(true);
+  const fecha = new Date()
+  const dia = fecha.getDate()
+  const mes = fecha.getMonth()+1
+  const year = fecha.getFullYear();
+  const fulldate = `${dia}${mes}${year}`
+  try {
+    const existeVentaDiaria = db.ventas?.[fulldate];
+  if(!existeVentaDiaria){
+    const nuevaVenta = {
+    [fulldate]:[
+      { 
+        id: Date.now(),
+        carrito: carrito,
+        cantidad: cantidad,
+        mtPago: mdPago || 'Efectivo',
+        total: subtotal 
+      } 
+    ]
+  }
+  await agregarVentas(idDoc, nuevaVenta, fulldate, false )
+  setCarrito([])
+  setCantidad(0)
+  setVuelto('')
+  setVueltoPuro(0)
+  setIsLoader(false)
+  }else{
+    const nuevaVenta =    
+      { 
+        id: Date.now(),
+        carrito: carrito,
+        cantidad: cantidad,
+        mtPago: mdPago || 'Efectivo',
+        total: subtotal 
+      }   
+  
+    await agregarVentas(idDoc, nuevaVenta, fulldate, true);
+      setCarrito([])
+      setCantidad(0)
+      setVuelto('')
+      setVueltoPuro(0)
+      setIsLoader(false)
+  }    
+  } catch (error) {
+    console.error('Error al cargar la venta nueva: ', error)
+  }
+}
 
   return (
     <div className='contenedor-caja'>
@@ -380,6 +427,7 @@ const calcularVuelto = () => {
       <button
         type='button'
         className='cobrar-btn'
+        onClick={cobrar}
       >
         {
           isLoader ? <Loader /> : 'COBRAR'
