@@ -33,9 +33,9 @@ nav{
   position: sticky;
   background-color: #f5f5f5;
   top: 0;
+  z-index:9998;
 }
-.menu {
-    
+.menu {    
     width: 95%;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -43,7 +43,8 @@ nav{
     background-color: #ffffff;
     margin: 0 auto;
     display: block; 
-    height: auto;
+    height: auto;position: sticky;
+    top:45px;
 }
 
 .menu ol {
@@ -59,9 +60,14 @@ nav{
     padding: 12px 20px;
     border-bottom: 1px solid #f0f0f0; 
     color: #333333;
-    font-size: 15px;    
     transition: background-color 0.3s ease, color 0.3s ease;
     cursor: pointer;
+  }
+  .menu ol li button {
+    width: 100%;
+    border: none;
+    background: transparent;
+    font-size: 15px;    
 }
 
 .menu ol li:last-child {

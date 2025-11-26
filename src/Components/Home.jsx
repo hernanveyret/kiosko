@@ -106,10 +106,10 @@ const Home = ({ idDoc,
         </nav>
         <section className='menu close' ref={menuRef}>
         <ol>
-          <li>Ventas diarias</li>
-          <li>Productos mas vendidos</li>
-          <li>Cambio de nombre de usuario</li>
-          <li>Cambio de contraseña</li>
+          <li><button>Ventas diarias</button></li>
+          <li><button>Productos mas vendidos</button></li>
+          <li><button>Cambio de nombre de usuario</button></li>
+          <li><button>Cambio de contraseña</button></li>
         </ol>
       </section>
         <section>
