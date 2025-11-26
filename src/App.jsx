@@ -12,6 +12,7 @@ function App() {
   const [ isLogin, setIsLogin ] = useState(true)
   const [ usuarioLogueado, setUsuarioLogueado ] = useState(null); // Muestra datos del usuario logedo
   const [ errorUsuario, setErrorUsuario ] = useState(false);
+  const [ ventaDiaria, setVentaDiaria ] = useState([])
   
   const productosParaCobrar = localStorage.getItem('cobrar-kiosco')
   const [ carrito, setCarrito ] = useState(productosParaCobrar ? JSON.parse(productosParaCobrar) : [])
@@ -54,7 +55,29 @@ useEffect(() => {
 // Dependencia clave: Se re-ejecuta solo cuando el usuario cambia.
 }, [usuarioLogueado]); 
 
-db.ventas && console.log('Base de datos db:', db.ventas)
+useEffect(() => {
+  db.ventas && console.log('Base de datos db:', db.ventas)
+  if(db.ventas){
+    const fechas = Object.keys(db.ventas);
+    console.log(fechas)
+    //console.log(db.ventas[fechas[0]])
+    //const totalDia = db.ventas[fechas[0]].reduce((acc, cant) => acc + cant.total, 0);
+    //console.log(totalDia)
+    fechas.forEach(i => {
+      const totalDia = db.ventas[i].reduce((acc, cant) => acc + cant.total, 0);
+      const dia = `${i.slice(0,2)}-${i.slice(2,4)}-${i.slice(4,8)}`
+      const info = {
+        fecha: dia,
+        totalDia
+      }
+      setVentaDiaria((prev) => [...prev, info ])
+    })
+  }
+},[db])
+
+useEffect(() => {
+  ventaDiaria && console.log(ventaDiaria)
+},[ventaDiaria])
 
   // Detecta si se loguea o sale.
   onAuthStateChanged( auth, ( user ) => {
