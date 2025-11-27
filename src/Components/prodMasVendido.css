@@ -1,0 +1,94 @@
+.contenedor-mas-vendidos {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contenedor-mas-vendidos h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #ff4500;
+    padding-bottom: 10px;
+}
+
+.productos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card-item {
+    flex: 1 1 250px;
+    max-width: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+}
+
+.card-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.img-item {
+    height: 150px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 5px;
+}
+
+.card-item p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.card-item p:first-of-type { 
+    font-weight: bold;
+    color: #333;
+    font-size: 16px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.card-item p:last-of-type { 
+    color: #ff4500;
+    font-weight: 700;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .card-item {
+        flex: 1 1 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .productos {
+        gap: 15px;
+    }
+    .card-item {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}

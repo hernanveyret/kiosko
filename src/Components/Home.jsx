@@ -4,6 +4,7 @@ import Ingresar from './Ingresar';
 import Lista from './Lista';
 import Caja from './Caja';
 import EditProducto from './EditProducto';
+import ProdMasVendido from './ProdMasVendido.jsx';
 import './home.css';
 
 
@@ -18,7 +19,8 @@ const Home = ({ idDoc,
                 isLoaderGeneral,
                 setIsLoaderGeneral,
                 sacarVentaDiaria,
-                productoMasVendido
+                productoMasVendido,
+                masVendido
               }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
@@ -27,10 +29,12 @@ const Home = ({ idDoc,
   const [ isOnCamara, setIsOnCamara ] = useState(false);
   const [ isEditarProducto, setIsEditarProducto ] = useState(false);
   const [ isOpenMenu, setIsOpenMenu ] = useState(true);
+  const [ isProductoMasVendido, setIsProductoMasVendido ] = useState(false)
 
   const [ numero, setNumero ] = useState(0);
   const [ idCodigo, setIdCodigo ] = useState(null);
   const [ valorCodigo , setValorCodigo ] = useState(null);
+  
 
   const menuRef = useRef(null)
 
@@ -120,7 +124,14 @@ const Home = ({ idDoc,
             <button
               type='button'
               onClick={() => {
+                setValorCodigo('');
+                setNumero('')
+                setIsLista(false);
+                setIsIngresar(false);
+                setIsCaja(false);
+                setIsEditarProducto(false);
                 setIsOpenMenu(!isOpenMenu)
+                setIsProductoMasVendido(true)
                 productoMasVendido()
               }}
             >
@@ -146,6 +157,12 @@ const Home = ({ idDoc,
         </ol>
       </section>
         <section>
+          { 
+            isProductoMasVendido && 
+              <ProdMasVendido 
+              masVendido={masVendido}
+              />
+          }
           {
             isEditarProducto &&
               <EditProducto 

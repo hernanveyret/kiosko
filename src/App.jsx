@@ -12,7 +12,8 @@ function App() {
   const [ isLogin, setIsLogin ] = useState(true)
   const [ usuarioLogueado, setUsuarioLogueado ] = useState(null); // Muestra datos del usuario logedo
   const [ errorUsuario, setErrorUsuario ] = useState(false);
-  const [ ventaDiaria, setVentaDiaria ] = useState([])
+  const [ ventaDiaria, setVentaDiaria ] = useState([]);
+  const [ masVendido, setMasVendido ] = useState([])
   
   const productosParaCobrar = localStorage.getItem('cobrar-kiosco')
   const [ carrito, setCarrito ] = useState(productosParaCobrar ? JSON.parse(productosParaCobrar) : [])
@@ -127,7 +128,8 @@ const productoMasVendido = () => {
   });
   // ordena por mayor a cantidad a menor cantidad
   productosAgregados.sort((a,b) => { return b.cantidad - a.cantidad })
-  console.log(productosAgregados); 
+  //console.log(productosAgregados); 
+  setMasVendido(productosAgregados)
 }
 
 
@@ -172,6 +174,7 @@ useEffect(() => {
           setIsLoaderGeneral={setIsLoaderGeneral}
           sacarVentaDiaria={sacarVentaDiaria}
           productoMasVendido={productoMasVendido}
+          masVendido={masVendido}
           />
       }
     </>
