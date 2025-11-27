@@ -59,11 +59,18 @@ useEffect(() => {
   db.ventas && console.log('Base de datos db:', db.ventas)
   if(db.ventas){
     const fechas = Object.keys(db.ventas);
-    console.log(fechas)
+    //console.log(fechas)
     //console.log(db.ventas[fechas[0]])
     //const totalDia = db.ventas[fechas[0]].reduce((acc, cant) => acc + cant.total, 0);
-    //console.log(totalDia)
-    fechas.forEach(i => {
+    //console.log(totalDia)    
+  }
+},[db])
+
+const sacarVentaDiaria = () => {
+  setVentaDiaria([])
+  const fechas = Object.keys(db.ventas);
+  console.log(fechas)
+  fechas.forEach(i => {
       const totalDia = db.ventas[i].reduce((acc, cant) => acc + cant.total, 0);
       const dia = `${i.slice(0,2)}-${i.slice(2,4)}-${i.slice(4,8)}`
       const info = {
@@ -72,11 +79,60 @@ useEffect(() => {
       }
       setVentaDiaria((prev) => [...prev, info ])
     })
-  }
-},[db])
+}
+
+const productoMasVendido = () => {  
+  const contadorCodigos = {};   
+  const fechas = Object.keys(db.ventas);
+
+  fechas.forEach(dia => {
+    if (Array.isArray(db.ventas[dia])) {
+      db.ventas[dia].forEach(venta => {
+        if (Array.isArray(venta.carrito)) {
+          venta.carrito.forEach(item => { 
+            const codigo = item.codigo;
+            const cantidad = Number(item.cantidad); 
+            const descripcion = item.descripcion; 
+            const peso = item.tamano
+            const img = item.img
+
+            // Verifica si este código ya está en nuestro contador
+            if (contadorCodigos.hasOwnProperty(codigo)) {
+              // Si existe, solo lo suma la cantidad al valor existente
+              contadorCodigos[codigo].cantidad += cantidad;
+            } else {
+              //  Si no existe crea un nuevo objeto con la cantidad inicial Y la descripción
+              contadorCodigos[codigo] = {
+                cantidad: cantidad,
+                descripcion: descripcion,
+                peso: peso,
+                img: img
+              };
+            }
+          }); 
+        }
+      });
+    }
+  });
+  
+  const productosAgregados= Object.keys(contadorCodigos).map(codigo => {    
+    const data = contadorCodigos[codigo];    
+    return {
+      codigo: codigo,
+      cantidad: data.cantidad,
+      descripcion: data.descripcion,
+      peso: data.peso,
+      img: data.img
+    };
+  });
+  // ordena por mayor a cantidad a menor cantidad
+  productosAgregados.sort((a,b) => { return b.cantidad - a.cantidad })
+  console.log(productosAgregados); 
+}
+
 
 useEffect(() => {
-  ventaDiaria && console.log(ventaDiaria)
+  ventaDiaria && console.log('Ventas por dia' ,ventaDiaria)
 },[ventaDiaria])
 
   // Detecta si se loguea o sale.
@@ -114,6 +170,8 @@ useEffect(() => {
           db={db}
           isLoaderGeneral={isLoaderGeneral}
           setIsLoaderGeneral={setIsLoaderGeneral}
+          sacarVentaDiaria={sacarVentaDiaria}
+          productoMasVendido={productoMasVendido}
           />
       }
     </>
