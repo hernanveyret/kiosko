@@ -16,7 +16,7 @@ useEffect(() => {
             ventaDiaria.length 
             ? 
               ventaDiaria.map((item, i) => (
-                <div className='card-venta'>
+                <div className='card-venta' key={i}>
                   <p>{item.fecha}</p>
                   <p>{item.totalDia.toLocaleString('es-AR', {
               style: 'currency',
