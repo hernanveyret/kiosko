@@ -70,7 +70,7 @@ useEffect(() => {
 const sacarVentaDiaria = () => {
   setVentaDiaria([])
   const fechas = Object.keys(db.ventas);
-  console.log(fechas)
+  //console.log(fechas)
   fechas.forEach(i => {
       const totalDia = db.ventas[i].reduce((acc, cant) => acc + cant.total, 0);
       const dia = `${i.slice(0,2)}-${i.slice(2,4)}-${i.slice(4,8)}`
@@ -132,11 +132,6 @@ const productoMasVendido = () => {
   setMasVendido(productosAgregados)
 }
 
-
-useEffect(() => {
-  ventaDiaria && console.log('Ventas por dia' ,ventaDiaria)
-},[ventaDiaria])
-
   // Detecta si se loguea o sale.
   onAuthStateChanged( auth, ( user ) => {
     if(user){
@@ -175,6 +170,7 @@ useEffect(() => {
           sacarVentaDiaria={sacarVentaDiaria}
           productoMasVendido={productoMasVendido}
           masVendido={masVendido}
+          ventaDiaria={ventaDiaria}
           />
       }
     </>

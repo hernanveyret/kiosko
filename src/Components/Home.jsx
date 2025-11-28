@@ -5,6 +5,7 @@ import Lista from './Lista';
 import Caja from './Caja';
 import EditProducto from './EditProducto';
 import ProdMasVendido from './ProdMasVendido.jsx';
+import VentasDiarias from './VentasDiarias.jsx';
 import './home.css';
 
 
@@ -20,7 +21,8 @@ const Home = ({ idDoc,
                 setIsLoaderGeneral,
                 sacarVentaDiaria,
                 productoMasVendido,
-                masVendido
+                masVendido,
+                ventaDiaria
               }) => {  
 
   const [ isIngresar, setIsIngresar ] = useState(false);
@@ -29,7 +31,8 @@ const Home = ({ idDoc,
   const [ isOnCamara, setIsOnCamara ] = useState(false);
   const [ isEditarProducto, setIsEditarProducto ] = useState(false);
   const [ isOpenMenu, setIsOpenMenu ] = useState(true);
-  const [ isProductoMasVendido, setIsProductoMasVendido ] = useState(false)
+  const [ isProductoMasVendido, setIsProductoMasVendido ] = useState(false);
+  const [ isVentasDiarias, setIsVentasDiarias ] = useState(false);
 
   const [ numero, setNumero ] = useState(0);
   const [ idCodigo, setIdCodigo ] = useState(null);
@@ -55,6 +58,7 @@ const Home = ({ idDoc,
               setIsLista(false);
               setIsIngresar(true);
               setIsOnCamara(true);
+              setIsVentasDiarias(false)
               setIsOpenMenu(true);
             }}
             >
@@ -70,6 +74,9 @@ const Home = ({ idDoc,
               setIsIngresar(false);
               setIsLista(true);
               setIsOpenMenu(true);
+              setIsProductoMasVendido(false)
+              setIsVentasDiarias(false)
+              setIsOpenMenu(true);
             }}
             >
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#eee"><path d="M320-280q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280Zm0-160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0-160q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm120 320h240v-80H440v80Zm0-160h240v-80H440v80Zm0-160h240v-80H440v80ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
@@ -84,6 +91,8 @@ const Home = ({ idDoc,
               setIsIngresar(false);
               setIsCaja(true);
               setIsEditarProducto(false);
+              setIsProductoMasVendido(false)
+              setIsVentasDiarias(false)
               setIsOpenMenu(true);
             }}
             >
@@ -115,6 +124,14 @@ const Home = ({ idDoc,
               type='button'
               onClick={() => {
                 setIsOpenMenu(!isOpenMenu)
+                setValorCodigo('');
+                setNumero('')
+                setIsLista(false);
+                setIsIngresar(false);
+                setIsCaja(false);
+                setIsEditarProducto(false);
+                setIsProductoMasVendido(false)
+                setIsVentasDiarias(true)
                 sacarVentaDiaria()
               }}
             >Ventas diarias
@@ -130,7 +147,8 @@ const Home = ({ idDoc,
                 setIsIngresar(false);
                 setIsCaja(false);
                 setIsEditarProducto(false);
-                setIsOpenMenu(!isOpenMenu)
+                setIsOpenMenu(!isOpenMenu);
+                setIsVentasDiarias(false)
                 setIsProductoMasVendido(true)
                 productoMasVendido()
               }}
@@ -143,7 +161,8 @@ const Home = ({ idDoc,
               type='button'
               onClick={() => {
                 setIsOpenMenu(!isOpenMenu)
-                
+                setIsVentasDiarias(false)
+                setIsProductoMasVendido(false)
               }}
             >Cambio de nombre de usuario</button></li>
           <li>
@@ -151,12 +170,19 @@ const Home = ({ idDoc,
               type='button'
               onClick={() => {
                 setIsOpenMenu(!isOpenMenu)
-                
+                setIsVentasDiarias(false)
+                setIsProductoMasVendido(false)             
               }}
             >Cambio de contraseña</button></li>
         </ol>
       </section>
         <section>
+          {
+            isVentasDiarias &&
+              <VentasDiarias 
+                ventaDiaria={ventaDiaria}
+              />
+          }
           { 
             isProductoMasVendido && 
               <ProdMasVendido 

@@ -20,7 +20,8 @@ useEffect(() => {
                 <div className='img-item'>
                   <img src={item.img} alt='Imagen del producto' />
                 </div>
-                  <p>{item.descripcion}</p>
+                  <p>{item.descripcion} {item.peso}</p>
+                  
                   <p>Cantidad: {item.cantidad}</p>
 
               </div>

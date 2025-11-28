@@ -1,0 +1,41 @@
+.contenedor-ventas {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.contenedor-ventas h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    border-bottom: 2px solid #ff4500;
+    padding-bottom: 10px;
+}
+.ventas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.card-venta {
+    display: flex;
+    flex: 1 1 250px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 300px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+}
+.card-venta:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}

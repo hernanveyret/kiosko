@@ -6,13 +6,18 @@ const Item = ({
               setIsEditarProducto,
               setIsLista,
               setIdCodigo,
-              }) => {  
+              }) => { 
+                
+  const handleErrorImg = (e) => {
+    e.target.src = './img/imagenPorDefecto.webp'; // asigna a laimg la imagen por defecto
+    e.target.onError = null;
+  }
   return (
     <div className='contenedor-item'>
       <div className='item-img'>
         {
-        item.img && <img src={item.img} alt='Imagen Producto' />
-      }
+          item.img && <img src={item.img} alt='Imagen Producto' onError={handleErrorImg} />
+        }
       </div>
       <div className='item-info'>
         <p><span className="titulo-oculto">Codigo:</span>{item.codigo}</p>
