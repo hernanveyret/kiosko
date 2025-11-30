@@ -75,6 +75,7 @@ const sacarVentaDiaria = () => {
       const totalDia = db.ventas[i].reduce((acc, cant) => acc + cant.total, 0);
       const dia = `${i.slice(0,2)}-${i.slice(2,4)}-${i.slice(4,8)}`
       const info = {
+        id: i,
         fecha: dia,
         totalDia
       }
@@ -128,7 +129,9 @@ const productoMasVendido = () => {
   });
   // ordena por mayor a cantidad a menor cantidad
   productosAgregados.sort((a,b) => { return b.cantidad - a.cantidad })
-  //console.log(productosAgregados); 
+  //console.log(productosAgregados);
+  const topDiez = productosAgregados.slice(0,10) 
+  console.log(topDiez)
   setMasVendido(productosAgregados)
 }
 

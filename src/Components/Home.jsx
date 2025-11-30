@@ -181,6 +181,7 @@ const Home = ({ idDoc,
             isVentasDiarias &&
               <VentasDiarias 
                 ventaDiaria={ventaDiaria}
+                db={db}
               />
           }
           { 

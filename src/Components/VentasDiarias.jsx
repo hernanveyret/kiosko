@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import './ventasDiarias.css';
 const VentasDiarias = ({
-                         ventaDiaria
+                         ventaDiaria,
+                         db
                       }) => {
+const [idFecha, setIdFecha ] = useState(null);
+
+useEffect(() => {
+  console.log(idFecha)
+  console.log(db.ventas[idFecha])
+},[idFecha])
 
 useEffect(() => {
   ventaDiaria && console.log('Ventas por dia' ,ventaDiaria)
@@ -16,7 +23,11 @@ useEffect(() => {
             ventaDiaria.length 
             ? 
               ventaDiaria.map((item, i) => (
-                <div className='card-venta' key={i}>
+                <div 
+                  className='card-venta' 
+                  key={i}
+                  onClick={() => setIdFecha(item.id)}
+                  >
                   <p>{item.fecha}</p>
                   <p>{item.totalDia.toLocaleString('es-AR', {
               style: 'currency',
