@@ -130,9 +130,8 @@ const productoMasVendido = () => {
   // ordena por mayor a cantidad a menor cantidad
   productosAgregados.sort((a,b) => { return b.cantidad - a.cantidad })
   //console.log(productosAgregados);
-  const topDiez = productosAgregados.slice(0,10) 
-  console.log(topDiez)
-  setMasVendido(productosAgregados)
+  const topDiez = productosAgregados.slice(0,9) 
+  setMasVendido(topDiez)
 }
 
   // Detecta si se loguea o sale.
