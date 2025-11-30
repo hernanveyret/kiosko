@@ -427,8 +427,8 @@ const cobrar = async () => {
           className='mediopago'
           onChange={(e) => SetMdPago(e.target.value)}
         >
-          <option defaultValue=''>...</option>
-          <option value='Efectivo'>Efectivo</option>
+          <option defaultValue='Efectivo'>Efectivo</option>
+          
           <option value='Mercado Pago'>Mercado Pago</option>
           <option value='Débito'>Devito</option>
         </select>

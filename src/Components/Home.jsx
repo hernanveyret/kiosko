@@ -255,7 +255,14 @@ const Home = ({ idDoc,
         </section>
       </main>
       <footer>
-        <p>HERNAN LUIS VEYRET</p>
+        <img src='./img/logo-dino-studio.webp' />
+        <div className='div-footer'>
+
+        <p>Dino Studio</p>
+        <p>Web Developement</p>
+        <p>2025</p>
+        </div>
+        
       </footer>
     </div>
   )

@@ -107,6 +107,24 @@ footer {
   color: white;  
   padding: 5px;
 }
+footer img {
+  width: 40px;
+}
+.div-footer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.div-footer p:nth-child(2) {
+  color: black;
+  font-weight: bold;
+}
+.div-footer p:nth-child(3) {
+  
+  font-weight: bold;
+}
 .close {
   display: none;
 }
